@@ -6,16 +6,21 @@
 - css in js: styled-component
 
 # Road Map
-## 学习styled-component
+## [学习styled-component](note-docs/styled-component.md)
+## [学习移动端布局](note-docs/mobile-css-layout.md)
+## [学习react-router-dom](note-docs/react-router.md)
+
 
 ## 学习Redux
+- [从轻量级的redux实现来看redux的核心设计](note-docs/mini-redux/)
 
 ## 学习RTK
 
-## 学习react-router-dom
 
 ## 学习React性能优化
 - 图片加载优化
 - React组件优化
 
+
 ## 学习服务部署
+（考虑下Vite？）
