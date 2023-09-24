@@ -1,8 +1,12 @@
-import './App.css';
+import { IconStyle } from "./assets/iconfont/iconfont";
+import { GlobalStyle } from "./styles/global";
+
 function App() {
   return (
-    <div className="App">
-    </div>
+    <>
+      <GlobalStyle />
+      <IconStyle />
+    </>
   );
 }
 
