@@ -1,19 +1,21 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const cloudApi = createApi({
-  name: 'cloud',
+  reducerPath: 'cloud',
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://localhost:3300",
+    baseUrl: 'http://localhost:3300',
     credentials: 'include'
   }),
-  endpoints: builder => {
+  endpoints: build => {
     return {
-      getRankList: builder.query({
-        query: '/toplist/detail'
+      // 排行榜数据
+      getRankList: build.query({
+        query: () => '/toplist/detail',
+        transformResponse: (result) => result.list
       })
     }
   }
-});
+})
 
 export default cloudApi;
 

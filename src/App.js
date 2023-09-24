@@ -11,7 +11,7 @@ function App () {
       <GlobalStyle />
       <IconStyle />
       <Provider store={store}>
-      <RouterProvider router={routes}></RouterProvider>
+        <RouterProvider router={routes}></RouterProvider>
       </Provider>
     </>
   )

@@ -108,6 +108,13 @@ const noWrap = () => {
   `
 }
 
+const decorateBackground = () => {
+  return css`
+    /* background: linear-gradient (hsla (0,0%,100%,0),hsla (0,0%,43%,.4)); */
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+  `;
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   'theme-color': '#d44439',
@@ -124,6 +131,8 @@ export default {
   'background-color': '#f2f3f4',
   'background-color-shadow': 'rgba(0, 0, 0, 0.3)',
   'highlight-background-color': '#fff',
+  'grey': 'grey',
+  decorateBackground,
   extendClick,
   noWrap,
   flyTransition
