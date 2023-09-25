@@ -32,8 +32,8 @@ const Rank = () => {
     </OfficialRowStyled>
   })
 
-  const worldwideRows = splitRankData[1].map(e => {
-    return <ListCard data={e} isBigMode={true}/>
+  const worldwideRows = splitRankData[1].map((e, index) => {
+    return <ListCard data={e} isBigMode={true} key={e.id + `${index}`}/>
   })
 
   return (

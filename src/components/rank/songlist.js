@@ -11,13 +11,14 @@ const ListWrapper = styled.div`
 const ListItem = styled.li`
   padding: 6px 12px;
   font-size: ${style["font-size-s"]};
+  line-height: 1.3;
   color: ${style.grey};
 `;
 
 const SongList = ({songs}) => {
   const elements = songs.map((e, index) => {
     return (
-      <ListItem>
+      <ListItem key={e.id + `${index}`}>
         {`${index+1}. ${e.first} - ${e.second}`}
       </ListItem>
     )
