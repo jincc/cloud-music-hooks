@@ -12,6 +12,11 @@ const cloudApi = createApi({
       getRankList: build.query({
         query: () => '/toplist/detail',
         transformResponse: (result) => result.list
+      }),
+      // 热门分类
+      getHotCategory: build.query({
+        query: () => `/playlist/hot`,
+        transformResponse: (result) => result.tags
       })
     }
   }
@@ -19,4 +24,4 @@ const cloudApi = createApi({
 
 export default cloudApi;
 
-export const { useGetRankListQuery } = cloudApi;
+export const { useGetRankListQuery, useGetHotCategoryQuery } = cloudApi;
