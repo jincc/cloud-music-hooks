@@ -1,6 +1,11 @@
 import styled from 'styled-components'
 import style from '../../styles/global'
 export const RankWapperStyled = styled.div`
+  position: fixed;
+  top: 90px;
+  width: 100%;
+  bottom: 0;
+  overflow: auto;
   .area {
     padding: 10px 5px;
     h2 {

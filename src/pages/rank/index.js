@@ -4,10 +4,6 @@ import { OfficialRowStyled, RankWapperStyled, WorldwideWapperStyled } from './st
 import ListCard from '../../components/rank/listCard'
 import SongList from '../../components/rank/songlist'
 
-const OfficialRow = () => {
-  return <div>我是行数据</div>
-}
-
 const Rank = () => {
   const { data: rankData = [] } = useGetRankListQuery()
   // 分离排行榜数据, 返回官方版和全球榜数据

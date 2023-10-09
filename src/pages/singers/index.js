@@ -1,6 +1,7 @@
 import {HotCategory, AlphaCategory} from "../../components/horizontalList";
 import styled from "styled-components";
 import style from '../../styles/global';
+import { useGetHotSingersQuery } from "../../store/api/cloudApi";
 const ContainerWrapper = styled.div`
   .menu {
     margin-top: 5px;
@@ -8,7 +9,12 @@ const ContainerWrapper = styled.div`
 `;
 
 const List = styled.ul`
-  margin-top: 10px;
+  padding-top: 10px;
+  position: fixed;
+  top: 150px;
+  bottom: 0;
+  width: 100%;
+  overflow: auto;
 `;
 
 const ListItemStyled = styled.li`
@@ -37,23 +43,24 @@ const ListItem = ({avatarUrl, singerName}) => {
     </ListItemStyled>
   )
 }
-// https://p1.music.126.net/78q0jUUJ0h08GxAs2G-tCA==/109951168529051968.jpg?param=300x300
 const Singers = () => {
+  const {data: singers=[]} = useGetHotSingersQuery({offset: 0});
   const handleClickCategory = (category) => {
     console.log(category);
   }
   const handleClickAlpha = (alpha) => {
     console.log(alpha);
   }
+  const singerElemenents = singers.map( (e, index) => {
+    return <ListItem avatarUrl={e.picUrl+`?param=150x150`} singerName={e.name} key={e.id + `${index}`} />
+  })
   return <ContainerWrapper>
     <div className="menu">
       <HotCategory onClick={handleClickCategory} />
       <AlphaCategory onClick={handleClickAlpha}/>
     </div>
     <List>
-      <ListItem avatarUrl={`https://p1.music.126.net/78q0jUUJ0h08GxAs2G-tCA==/109951168529051968.jpg?param=300x300`} singerName={'林俊杰'}/>
-      <ListItem avatarUrl={`https://p1.music.126.net/78q0jUUJ0h08GxAs2G-tCA==/109951168529051968.jpg?param=300x300`} singerName={'林俊杰'}/>
-      <ListItem avatarUrl={`https://p1.music.126.net/78q0jUUJ0h08GxAs2G-tCA==/109951168529051968.jpg?param=300x300`} singerName={'林俊杰'}/>
+      {singerElemenents}
     </List>
   </ContainerWrapper>
 };
