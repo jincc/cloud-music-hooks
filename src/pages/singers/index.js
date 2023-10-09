@@ -1,7 +1,8 @@
 import {HotCategory, AlphaCategory} from "../../components/horizontalList";
 import styled from "styled-components";
 import style from '../../styles/global';
-import { useGetHotSingersQuery } from "../../store/api/cloudApi";
+import { useGetSingersByCategoryQuery, useGetHotSingersQuery } from "../../store/api/cloudApi";
+import { useState } from "react";
 const ContainerWrapper = styled.div`
   .menu {
     margin-top: 5px;
@@ -44,12 +45,32 @@ const ListItem = ({avatarUrl, singerName}) => {
   )
 }
 const Singers = () => {
-  const {data: singers=[]} = useGetHotSingersQuery({offset: 0});
+  const [query, setQuery] = useState({
+    category: null,
+    alpha: null
+  });
+  const [offset, setOffset] = useState(0);
+  // 是否用户选中了分类信息
+  const isFetchByCategory = query.category != null || query.alpha != null;
+  console.log(isFetchByCategory);
+  const {data: hotSingers=[]} = useGetHotSingersQuery(offset, {
+    skip: isFetchByCategory
+  });
+
+  const {data: categorySingers=[]} = useGetSingersByCategoryQuery({
+    offset,
+    ...query
+  }, {
+    skip: !isFetchByCategory
+  });
+
+  const singers =  isFetchByCategory ? categorySingers : hotSingers;
+
   const handleClickCategory = (category) => {
-    console.log(category);
+    setQuery({...query, category});
   }
   const handleClickAlpha = (alpha) => {
-    console.log(alpha);
+    setQuery({...query, alpha});
   }
   const singerElemenents = singers.map( (e, index) => {
     return <ListItem avatarUrl={e.picUrl+`?param=150x150`} singerName={e.name} key={e.id + `${index}`} />

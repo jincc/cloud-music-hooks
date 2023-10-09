@@ -13,20 +13,30 @@ const cloudApi = createApi({
         query: () => '/toplist/detail',
         transformResponse: result => result.list
       }),
-      // 热门分类
+      // 热门歌单分类
       getHotCategory: build.query({
         query: () => `/playlist/hot`,
         transformResponse: result => result.tags
       }),
       // 热门歌手
       getHotSingers: build.query({
-        query: ({ offset }) => `/top/artists?offset=${offset}`,
+        query: (offset) => `/top/artists?offset=${offset}`,
         transformResponse: result => result.artists
       }),
       //根据分类查询接口
       getSingersByCategory: build.query({
         query: ({ offset, category, alpha }) =>
-          `/artist/list?offset=${offset}&cat=${category}&initial=${alpha.toLowerCase()}`,
+          {
+            let uri = new URLSearchParams();
+            uri.set('offset', offset);
+            if (category != null) {
+              const [area, type] = category.split('#')
+              uri.set('type', type);
+              category && uri.set('area', area);
+            }
+            alpha && uri.set('initial', alpha);
+            return `/artist/list?${uri.toString()}`
+          },
         transformResponse: result => result.artists
       })
     }

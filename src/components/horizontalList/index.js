@@ -2,6 +2,8 @@ import { useGetHotCategoryQuery } from '../../store/api/cloudApi'
 import styled from 'styled-components'
 import style from '../../styles/global'
 import { useMemo } from 'react'
+import { useState } from 'react'
+import { getDefaultAlpha, getDefaultSingerCategory } from '../../utils/config'
 
 const ContainerStyled = styled.div`
   display: flex;
@@ -30,6 +32,11 @@ const ContainerStyled = styled.div`
       line-height: 1.5;
       color: ${style['font-color-desc']};
       margin-right: 10px;
+      padding: 0 4px;
+      border-radius: 3px;
+      &.selected {
+        border: 1px solid ${style['theme-color']};
+      }
     }
   }
   /* 隐藏Chrome和Safari浏览器的滚动条 */
@@ -40,9 +47,16 @@ const ContainerStyled = styled.div`
 // title表示列表左侧的说明
 // list表示为列表数据ß
 export const HorizontalList = ({list=[], title, onClick}) => {
+  const [selectId, setSelectId] = useState(-1);
+  const handleClick = (id) => {
+    setSelectId(id)
+    onClick && onClick(id)
+  }
+
   const elements = list.map((e, index) => {
     const key = e.id || index
-    return <li key={key} onClick={() => onClick && onClick(e)}>{e.name || e}</li>
+    const className = selectId === e.id ? 'selected' : ''
+    return <li className={className} key={key} onClick={() => handleClick(e.id)}>{e.name || e}</li>
   })
   
   return (
@@ -54,18 +68,16 @@ export const HorizontalList = ({list=[], title, onClick}) => {
 }
 
 export const HotCategory = ({onClick}) => {
-  const { data } = useGetHotCategoryQuery()
-  return <HorizontalList title={`分类(默认热门):`} list={data} onClick={onClick}/>
+  const list = useMemo( () => {
+    return getDefaultSingerCategory()
+  }, []);
+  return <HorizontalList title={`分类(默认热门):`} list={list} onClick={onClick}/>
 }
 
 
 export const AlphaCategory = ({onClick}) => {
   const list = useMemo(() => {
-    let items = [];
-    for (const char of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') {
-      items.push({id: char, name: char});
-    }
-    return items;
+    return getDefaultAlpha();
   }, []);
   return <HorizontalList title={`首字母:`} list={list} onClick={onClick}/>
 }
