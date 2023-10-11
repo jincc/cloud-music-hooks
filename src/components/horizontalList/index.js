@@ -47,10 +47,12 @@ const ContainerStyled = styled.div`
 // title表示列表左侧的说明
 // list表示为列表数据ß
 export const HorizontalList = ({list=[], title, onClick}) => {
-  const [selectId, setSelectId] = useState(-1);
+  const NOT_USE_ID = -100;
+  const [selectId, setSelectId] = useState(NOT_USE_ID);
   const handleClick = (id) => {
-    setSelectId(id)
-    onClick && onClick(id)
+    let newId = selectId !== id ? id : NOT_USE_ID;
+    setSelectId(newId);
+    onClick && onClick(newId !== NOT_USE_ID ? newId : null);
   }
 
   const elements = list.map((e, index) => {

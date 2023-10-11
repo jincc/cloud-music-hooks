@@ -21,7 +21,8 @@ const cloudApi = createApi({
       // 热门歌手
       getHotSingers: build.query({
         query: (offset) => `/top/artists?offset=${offset}`,
-        transformResponse: result => result.artists
+        transformResponse: result => result.artists,
+        keepUnusedDataFor: 0
       }),
       //根据分类查询接口
       getSingersByCategory: build.query({
