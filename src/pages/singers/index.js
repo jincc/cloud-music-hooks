@@ -5,7 +5,7 @@ import {
   useGetSingersByCategoryQuery,
   useGetHotSingersQuery
 } from '../../store/api/cloudApi'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Scroll from '../../components/scroll'
 const ContainerWrapper = styled.div`
   .menu {
@@ -49,70 +49,46 @@ const ListItem = ({ avatarUrl, singerName }) => {
   )
 }
 const Singers = () => {
+  const scrollRef = useRef();
   //查询所用的参数，交互会重新修改这些参数触发重新加载
   const [query, setQuery] = useState({
     category: null,
-    alpha: null
+    alpha: null,
+    offset: 0
   })
   //loading状态机
   const [loading, setLoading] = useState({
     pullDown: false,
     pullUp: false
-  })
+  });
 
-  //用于上拉和下拉的偏移量
-  const [offset, setOffset] = useState(0)
-  // 是否用户选中了分类信息
-  const isFetchByCategory = query.category != null || query.alpha != null
-  // 查询热门歌手数据
-  const { data: hotSingers = [] } = useGetHotSingersQuery(offset, {
-    skip: isFetchByCategory
-  })
-  //查询分类歌手数据
-  const { data: categorySingers = [] } = useGetSingersByCategoryQuery(
-    {
-      offset,
-      ...query
-    },
-    {
-      skip: !isFetchByCategory
+  // 查询歌手数据
+  const {data: singers = []} = useGetSingersByCategoryQuery(query);
+  useEffect(() => {
+    if (loading.pullDown || loading.pullUp) {
+      setLoading({pullUp: false, pullDown: false});
     }
-  )
-  // useEffect(() => {
-  //   setSingers(prev => {
-  //     if (prev.offset === offset) return prev;
-  //     return {
-  //       offset,
-  //       data: prev.data.concat(isFetchByCategory ? categorySingers : hotSingers)
-  //     };
-  //   });
-  // }, [isFetchByCategory, categorySingers, hotSingers, offset]);
-
-  const singers = isFetchByCategory ? categorySingers : hotSingers;
+  });
 
   const handleClickCategory = category => {
-    setQuery({ ...query, category })
+    setQuery({ ...query, category, offset: 0 });
+    scrollRef.current.refresh();
   }
   const handleClickAlpha = alpha => {
-    setQuery({ ...query, alpha })
+    setQuery({ ...query, alpha, offset: 0 });
+    scrollRef.current.refresh();
   }
   //下拉刷新
   const handlePulldown = () => {
     console.log('pulldown')
     setLoading({ ...loading, pullDown: true })
-    // setOffset(0)
-    setTimeout(() => {
-      setLoading({ ...loading, pullDown: false })
-    }, 2000)
+    setQuery({...query, offset: 0});
   }
 
   const handlePullup = () => {
     console.log('pullup')
     setLoading({ ...loading, pullUp: true })
-    // setOffset(singers.data.length)
-    setTimeout(() => {
-      setLoading({ ...loading, pullUp: false })
-    }, 2000)
+    setQuery({...query, offset: singers.length});
   }
 
   const singerElemenents = singers.map((e, index) => {
@@ -133,6 +109,7 @@ const Singers = () => {
       </div>
       <ListContainer>
         <Scroll
+          ref={scrollRef}
           pullDown={handlePulldown}
           pullDownLoading={loading.pullDown}
           pullUp={handlePullup}

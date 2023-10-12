@@ -18,28 +18,49 @@ const cloudApi = createApi({
         query: () => `/playlist/hot`,
         transformResponse: result => result.tags
       }),
-      // 热门歌手
-      getHotSingers: build.query({
-        query: (offset) => `/top/artists?offset=${offset}`,
-        transformResponse: result => result.artists,
-        keepUnusedDataFor: 0
-      }),
       //根据分类查询接口
       getSingersByCategory: build.query({
+        // 设置query查询信息
         query: ({ offset, category, alpha }) =>
           {
-            let uri = new URLSearchParams();
-            uri.set('offset', offset);
-            if (category != null) {
-              const [area, type] = category.split('#')
-              uri.set('type', type);
-              category && uri.set('area', area);
+            if (category || alpha) {
+              let uri = new URLSearchParams();
+              uri.set('offset', offset);
+              if (category != null) {
+                const [area, type] = category.split('#')
+                uri.set('type', type);
+                category && uri.set('area', area);
+              }
+              if (alpha != null) {
+                uri.set('initial', alpha);
+              }
+              return `/artist/list?${uri.toString()}`;
             }
-            alpha && uri.set('initial', alpha);
-            return `/artist/list?${uri.toString()}`
+            return `/top/artists?offset=${offset}`;
           },
-        transformResponse: result => result.artists
-      })
+        //转换response
+        transformResponse: result => result.artists,
+        //自定义缓存key，删除offset字段目的是为了分页查询时命中同一个缓存
+        serializeQueryArgs: ({queryArgs}) => {
+          const newArgs = {...queryArgs};
+          if (newArgs.offset != null) {
+            delete newArgs.offset;
+          }
+          return newArgs;
+        },
+        merge: (currentCache, newItems, {arg}) => {
+          console.log(arg);
+          if (arg.offset !== 0) {
+            //说明是上拉刷新
+            currentCache.push(...newItems);
+          } else {
+            currentCache = newItems;
+          }
+        },
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg !== previousArg
+        },
+      }),
     }
   }
 })
@@ -49,6 +70,6 @@ export default cloudApi
 export const {
   useGetRankListQuery,
   useGetHotCategoryQuery,
-  useGetHotSingersQuery,
-  useGetSingersByCategoryQuery
+  useGetSingersByCategoryQuery,
+  useLazyGetSingersByCategoryQuery
 } = cloudApi
