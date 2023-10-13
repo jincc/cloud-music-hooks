@@ -3,12 +3,10 @@ import styled from 'styled-components'
 import style from '../../styles/global'
 import {
   useGetSingersByCategoryQuery,
-  useGetHotSingersQuery
 } from '../../store/api/cloudApi'
 import { useEffect, useRef, useState } from 'react'
 import Scroll from '../../components/scroll'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchSingers, selectSingers, setAlpha, setCategory } from '../../store/api/singersSlice'
+import { useDispatch } from 'react-redux'
 const ContainerWrapper = styled.div`
   .menu {
     margin-top: 5px;
@@ -52,48 +50,44 @@ const ListItem = ({ avatarUrl, singerName }) => {
 }
 const Singers = () => {
   const scrollRef = useRef();
-  const dispatch = useDispatch();
   //查询所用的参数，交互会重新修改这些参数触发重新加载
   const [query, setQuery] = useState({
     category: null,
     alpha: null,
     offset: 0
   })
-  // //loading状态机
-  // const [loading, setLoading] = useState({
-  //   pullDown: false,
-  //   pullUp: false
-  // });
+  //loading状态机
+  const [loading, setLoading] = useState({
+    pullDown: false,
+    pullUp: false
+  });
 
   // 查询歌手数据
-  // const {data: singers = []} = useGetSingersByCategoryQuery(query);
-  const {singers, loading} = useSelector(selectSingers);
-  console.log(singers, loading);
+  const {data: singers = []} = useGetSingersByCategoryQuery(query);
   useEffect(() => {
-    // if (loading.pullDown || loading.pullUp) {
-    //   setLoading({pullUp: false, pullDown: false});
-    // }
-    dispatch(fetchSingers());
-  }, []);
+    if (loading.pullDown || loading.pullUp) {
+      setLoading({pullUp: false, pullDown: false});
+    }
+  });
 
   const handleClickCategory = category => {
     setQuery({ ...query, category, offset: 0 });
     scrollRef.current.refresh();
-    dispatch(setCategory(category));
   }
   const handleClickAlpha = alpha => {
     setQuery({ ...query, alpha, offset: 0 });
     scrollRef.current.refresh();
-    dispatch(setAlpha(alpha));
   }
   //下拉刷新
   const handlePulldown = () => {
     console.log('pulldown')
+    setLoading({ ...loading, pullDown: true })
     setQuery({...query, offset: 0});
   }
 
   const handlePullup = () => {
     console.log('pullup')
+    setLoading({ ...loading, pullUp: true })
     setQuery({...query, offset: singers.length});
   }
 
@@ -117,7 +111,9 @@ const Singers = () => {
         <Scroll
           ref={scrollRef}
           pullDown={handlePulldown}
+          pullDownLoading={loading.pullDown}
           pullUp={handlePullup}
+          pullUpLoading={loading.pullUp}
         >
           <ul>{singerElemenents}</ul>
         </Scroll>

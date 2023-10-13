@@ -32,3 +32,5 @@ export function getDefaultAlpha() {
   items.splice(0, 0, {id: null, name: '全部'})
   return items;
 }
+
+export const BASE_URL = 'http://localhost:3300';

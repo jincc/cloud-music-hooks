@@ -1,9 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { getQuerySingerParams } from '../../utils';
+import { BASE_URL } from '../../utils/config';
 
 const cloudApi = createApi({
   reducerPath: 'cloud',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3300',
+    baseUrl: BASE_URL,
     credentials: 'include'
   }),
   endpoints: build => {
@@ -21,23 +23,7 @@ const cloudApi = createApi({
       //根据分类查询接口
       getSingersByCategory: build.query({
         // 设置query查询信息
-        query: ({ offset, category, alpha }) =>
-          {
-            if (category || alpha) {
-              let uri = new URLSearchParams();
-              uri.set('offset', offset);
-              if (category != null) {
-                const [area, type] = category.split('#')
-                uri.set('type', type);
-                category && uri.set('area', area);
-              }
-              if (alpha != null) {
-                uri.set('initial', alpha);
-              }
-              return `/artist/list?${uri.toString()}`;
-            }
-            return `/top/artists?offset=${offset}`;
-          },
+        query: (args) => getQuerySingerParams(args),
         //转换response
         transformResponse: result => result.artists,
         //自定义缓存key，删除offset字段目的是为了分页查询时命中同一个缓存
