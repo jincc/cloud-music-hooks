@@ -1,3 +1,5 @@
+import { BASE_URL } from "./config";
+
 /**
  * 防抖函数
  * @param {*} func 
@@ -40,4 +42,26 @@ export function getQuerySingerParams({category, alpha, offset}) {
     return `/artist/list?${uri.toString()}`;
   }
   return `/top/artists?offset=${offset}`;
+}
+/**
+ * 延时发出promise
+ * @param {*} ms 
+ * @returns 
+ */
+export function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+/**
+ * 发送get网络请求
+ * 注意: 因为是本域请求，1000ms的作用在于模拟慢速网络
+ * @param {*} uri 
+ */
+export async function get(uri) {
+  let response = await delay(1000).then(v => fetch(BASE_URL + uri));
+  if (!response.ok) {
+   throw new Error(response.statusText);
+  };
+  return await response.json();
 }

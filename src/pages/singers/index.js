@@ -1,11 +1,11 @@
 import { HotCategory, AlphaCategory } from '../../components/horizontalList'
 import styled from 'styled-components'
 import style from '../../styles/global'
-import {
-  useGetSingersByCategoryQuery,
-} from '../../store/api/cloudApi'
 import { useEffect, useRef, useState } from 'react'
 import Scroll from '../../components/scroll'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchSingers, selectSingers } from '../../store/api/singersSlice'
+import { createReducer } from '@reduxjs/toolkit'
 const ContainerWrapper = styled.div`
   .menu {
     margin-top: 5px;
@@ -49,6 +49,8 @@ const ListItem = ({ avatarUrl, singerName }) => {
 }
 const Singers = () => {
   const scrollRef = useRef();
+  const dispatch = useDispatch();
+  
   //查询所用的参数，交互会重新修改这些参数触发重新加载
   const [query, setQuery] = useState({
     category: null,
@@ -62,14 +64,18 @@ const Singers = () => {
   });
 
   // 查询歌手数据
-  const {data: singers = []} = useGetSingersByCategoryQuery(query);
+  const {singers, hasNext} = useSelector(selectSingers);
   useEffect(() => {
-    if (loading.pullDown || loading.pullUp) {
+    dispatch(fetchSingers(query))
+    .then(v => {
       setTimeout(() => {
-        setLoading({pullUp: false, pullDown: false});
-      }, 1000);
-    }
-  });
+        setLoading({
+          pullDown: false,
+          pullUp: false
+        });
+      }, 500);
+    });
+  }, [dispatch, query]);
 
   const handleClickCategory = category => {
     setQuery({ ...query, category, offset: 0 });
@@ -82,14 +88,16 @@ const Singers = () => {
   //下拉刷新
   const handlePulldown = () => {
     console.log('pulldown')
-    setLoading({ ...loading, pullDown: true })
+    setLoading({...loading, pullDown: true});
     setQuery({...query, offset: 0});
   }
 
   const handlePullup = () => {
     console.log('pullup')
-    setLoading({ ...loading, pullUp: true })
-    setQuery({...query, offset: singers.length});
+    if (hasNext) {
+      setQuery({...query, offset: singers.length});
+      setLoading({...loading, pullUp: true});
+    }
   }
 
   const singerElemenents = singers.map((e, index) => {
@@ -112,8 +120,8 @@ const Singers = () => {
         <Scroll
           ref={scrollRef}
           pullDown={handlePulldown}
-          pullDownLoading={loading.pullDown}
           pullUp={handlePullup}
+          pullDownLoading={loading.pullDown}
           pullUpLoading={loading.pullUp}
         >
           <ul>{singerElemenents}</ul>

@@ -1,14 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getQuerySingerParams } from "../../utils";
+import { get, getQuerySingerParams } from "../../utils";
 import { BASE_URL } from "../../utils/config";
 
 export const fetchSingers = createAsyncThunk('singers/query', async (query, thunkApi) => { 
    let uri = getQuerySingerParams(query);
-   let response = await fetch(BASE_URL + uri);
-   let json = await response.json();
-   if (json.code !== 200) throw new Error(json.message);
+   let results = await get(uri);
    return {
-    results: json,
+    results,
     query
    };
 });

@@ -1,31 +1,34 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useGetRankListQuery } from '../../store/api/cloudApi'
 import { OfficialRowStyled, RankWapperStyled, WorldwideWapperStyled } from './style'
 import ListCard from '../../components/rank/listCard'
 import SongList from '../../components/rank/songlist'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchRankList, selectRank } from '../../store/api/rankSlice'
-import Spinner from '../../components/spinner'
 
 const Rank = () => {
-  const dispatch = useDispatch();
-  const {official=[], worldwide=[], loadding} = useSelector(selectRank);
-  // 获取数据
-  useEffect(() => {
-    dispatch(fetchRankList());
-  }, []);
-  if (loadding) {
-    return  <Spinner></Spinner>;
-  }
+  const { data: rankData = [] } = useGetRankListQuery()
+  // 分离排行榜数据, 返回官方版和全球榜数据
+  const splitRankData = useMemo(() => {
+    let worldwideList = []
+    let otherList = []
+    rankData.forEach(element => {
+      if (element.tracks && element.tracks.length > 0) {
+        otherList.push(element)
+      } else {
+        worldwideList.push(element)
+      }
+    })
+    return [otherList, worldwideList]
+  }, [rankData])
+  console.log(splitRankData)
 
-  const officialRows = official.map((e, index) => {
+  const officialRows = splitRankData[0].map((e, index) => {
     return <OfficialRowStyled key={e.id + `${index}`}>
       <ListCard data={e} />
       <SongList songs={e.tracks}/>
     </OfficialRowStyled>
   })
 
-  const worldwideRows = worldwide.map((e, index) => {
+  const worldwideRows = splitRankData[1].map((e, index) => {
     return <ListCard data={e} isBigMode={true} key={e.id + `${index}`}/>
   })
 
