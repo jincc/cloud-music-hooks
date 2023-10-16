@@ -65,3 +65,12 @@ export async function get(uri) {
   };
   return await response.json();
 }
+
+export function formatPlayCount(count) {
+  if (count < 1000) return count;
+
+  if (Math.floor(count / 10000) < 10000) {
+    return Math.floor(count / 1000) / 10 + '万';
+  }
+  return Math.floor(count / 10000000) / 10 + '亿';
+}
