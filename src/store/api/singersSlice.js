@@ -17,7 +17,9 @@ const singersSlice = createSlice({
     singers: [],
     loadding: false,
     error: null,
-    hasNext: false
+    hasNext: false,
+    // 是否是第一次拉取
+    initialed: true,
   },
   reducers: {
   },
@@ -34,7 +36,10 @@ const singersSlice = createSlice({
       }
     })
     .addCase(fetchSingers.pending, (state, action) => {
-      state.loadding = true;
+      if (state.initialed) {
+        state.loadding = true;
+        state.initialed = false;
+      }
     })
     .addCase(fetchSingers.rejected, (state, action) => {
       state.loadding = false;

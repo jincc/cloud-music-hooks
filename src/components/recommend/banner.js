@@ -12,7 +12,7 @@ const Container = styled.div`
   background: white;
   position: relative;
   .before {
-    background-color: ${style['theme-color']};
+    background-color: ${props => props.$loadding ? 'transparent' : style['theme-color']};
     height: 100px;
     position: absolute;
     top: 0px;
@@ -36,15 +36,15 @@ const Container = styled.div`
 
 const Banner = () => {
   const dispatch = useDispatch()
-  const { banners = [] } = useSelector(selectRecommend)
+  const { banners = [] , loadding} = useSelector(selectRecommend)
   //获取banner数据
   useEffect(() => {
     dispatch(fetchBanners())
   }, [])
 
-  const slides = banners.map(e => {
+  const slides = banners.map((e, index) => {
     return (
-      <SwiperSlide key={e.encodeId}>
+      <SwiperSlide key={e.encodeId + index}>
         <div className='slider'>
           <img src={e.imageUrl} alt='banner' width='100%' height='100%' />
         </div>
@@ -53,8 +53,8 @@ const Banner = () => {
   })
 
   return (
-    <Container>
-      <div className='before' />
+    <Container $loadding={loadding}>
+      <div className='before'/>
       <div className='swiper-container'>
         <Swiper modules={[Pagination]} pagination>
           {slides}

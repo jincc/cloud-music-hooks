@@ -32,8 +32,8 @@ const AlbumList = () => {
 
   if (albums.length === 0) return <div></div>
 
-  const albumsElems = albums.map(e => {
-    return <Album album={e} key={e.id} />
+  const albumsElems = albums.map((e, index) => {
+    return <Album album={e} key={e.id + index} />
   })
   return <Container>
     <h2 className="header">推荐歌单</h2>

@@ -6,6 +6,7 @@ import Scroll from '../../components/scroll'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSingers, selectSingers } from '../../store/api/singersSlice'
 import { createReducer } from '@reduxjs/toolkit'
+import Loading from '../../components/loading'
 const ContainerWrapper = styled.div`
   .menu {
     margin-top: 5px;
@@ -64,7 +65,7 @@ const Singers = () => {
   });
 
   // 查询歌手数据
-  const {singers, hasNext} = useSelector(selectSingers);
+  const {singers, hasNext, loadding} = useSelector(selectSingers);
   useEffect(() => {
     dispatch(fetchSingers(query))
     .then(v => {
@@ -116,6 +117,7 @@ const Singers = () => {
         <HotCategory onClick={handleClickCategory} />
         <AlphaCategory onClick={handleClickAlpha} />
       </div>
+      {loadding ? <Loading /> : null}
       <ListContainer>
         <Scroll
           ref={scrollRef}

@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { NavbarStyled, tabSelectLineStyled } from './style'
 
 const TabItem = ({ to, title }) => {
@@ -14,12 +14,17 @@ const TabItem = ({ to, title }) => {
 }
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  
+  const handleClickSearch = () => {
+    navigate('/search');
+  }
   return (
     <NavbarStyled>
       <div className='menu'>
         <span className='iconfont'>&#xe65c;</span>
         <span className='title'>WebApp</span>
-        <span className='iconfont'>&#xe62b;</span>
+        <span className='iconfont' onClick={handleClickSearch}>&#xe62b;</span>
       </div>
       <div className='tab'>
         <TabItem to='/recommend' title='推荐' />

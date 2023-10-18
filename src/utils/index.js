@@ -53,13 +53,24 @@ export function delay(ms) {
     setTimeout(resolve, ms);
   });
 }
+function buildQueryString(params) {
+  const query = Object.entries(params)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+  return query;
+}
+
 /**
  * 发送get网络请求
  * 注意: 因为是本域请求，1000ms的作用在于模拟慢速网络
  * @param {*} uri 
  */
-export async function get(uri) {
-  let response = await delay(1000).then(v => fetch(BASE_URL + uri));
+export async function get(uri, params) {
+  let query = '';
+  if (params) {
+    query = '?' + buildQueryString(params);
+  }
+  let response = await delay(1000).then(v => fetch(BASE_URL + uri + query));
   if (!response.ok) {
    throw new Error(response.statusText);
   };

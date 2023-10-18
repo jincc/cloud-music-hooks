@@ -4,6 +4,7 @@ import ErrorPage from '../pages/error'
 import Recommend from '../pages/recommend'
 import Singers from '../pages/singers'
 import Rank from '../pages/rank'
+import Search from '../pages/search'
 
 export default createBrowserRouter([
   {
@@ -16,5 +17,9 @@ export default createBrowserRouter([
       { path: 'singers', element: <Singers /> },
       { path: 'rank', element: <Rank /> }
     ]
+  },
+  {
+    path: '/search',
+    element: <Search />
   }
 ])

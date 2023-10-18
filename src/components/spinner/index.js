@@ -16,7 +16,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
+  background: transparent;
   h4 {
     margin: 5px;
   }
