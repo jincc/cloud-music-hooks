@@ -9,6 +9,7 @@ import {
 } from '../../store/api/searchSlice'
 import AlbumItem from '../songlist/ablumItem'
 import SongItem from '../songlist/songItem'
+import { debounce } from '../../utils'
 
 const Container = styled.div`
   .sectionName {
@@ -41,9 +42,9 @@ const SearchContent = ({ keyword }) => {
   const createSingerList = useCallback(artists => {
     if (artists.length === 0) return null
 
-    const childs = artists.map(e => {
+    const childs = artists.map((e, index) => {
       return (
-        <div className='album'>
+        <div className='album' key={index}>
           <AlbumItem
             picUrl={e.picUrl + '?params=300*300'}
             name={`歌单: ${e.name}`}
@@ -62,9 +63,9 @@ const SearchContent = ({ keyword }) => {
   const createAlbumsList = useCallback(playlists => {
     if (playlists.length === 0) return null
 
-    const childs = playlists.map(e => {
+    const childs = playlists.map((e, index) => {
       return (
-        <div className='album'>
+        <div className='album' key={index}>
           <AlbumItem
             picUrl={e.coverImgUrl + '?params=300*300'}
             name={`歌单: ${e.name}`}
@@ -85,7 +86,7 @@ const SearchContent = ({ keyword }) => {
 
     const childs = songs.map((e, index) => {
       const description = `${e.artists[0].name} - ${e.album.name}`
-      return <SongItem name={e.name} description={description} />
+      return <SongItem name={e.name} description={description} key={index}/>
     })
     return (
       <div>

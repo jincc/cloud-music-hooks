@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import style from '../../styles/global'
 import { useNavigate } from 'react-router-dom'
 import { debounce } from '../../utils'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const Container = styled.div`
   display: flex;
@@ -29,8 +29,17 @@ const Container = styled.div`
     color: #fff;
   }
 `
-const Navi = ({ onChange }) => {
+const Navi = ({onChange, hotKeyword}) => {
   const navigate = useNavigate()
+  const [keyword, setKeyword] = useState('');
+
+  //如果外界选中热点词，置为输入框内容
+  useEffect(() => {
+    if (hotKeyword && hotKeyword.length) {
+      setKeyword(hotKeyword);
+    }
+  }, [hotKeyword]);
+
   const handleBack = () => {
     navigate(-1)
   };
@@ -50,7 +59,11 @@ const Navi = ({ onChange }) => {
         className='input'
         type='text'
         placeholder='搜索歌曲、歌手、专辑'
-        onChange={_onChange}
+        onChange={(e) => {
+          _onChange(e.target.value);
+          setKeyword(e.target.value);
+        }}
+        value={keyword}
       />
     </Container>
   )
