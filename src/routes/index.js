@@ -5,7 +5,7 @@ import Recommend from '../pages/recommend'
 import Singers from '../pages/singers'
 import Rank from '../pages/rank'
 import Search from '../pages/search'
-
+import Album from '../pages/album'
 export default createBrowserRouter([
   {
     path: '/',
@@ -21,5 +21,9 @@ export default createBrowserRouter([
   {
     path: '/search',
     element: <Search />
+  },
+  {
+    path: '/album/:id',
+    element: <Album />
   }
 ])

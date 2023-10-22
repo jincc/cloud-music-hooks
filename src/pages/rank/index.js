@@ -6,9 +6,11 @@ import SongList from '../../components/rank/songlist'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchRankList, selectRank } from '../../store/api/rankSlice'
 import Spinner from '../../components/spinner'
+import { useNavigate } from 'react-router-dom'
 
 const Rank = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {official=[], worldwide=[], loadding} = useSelector(selectRank);
   // 获取数据
   useEffect(() => {
@@ -19,14 +21,14 @@ const Rank = () => {
   }
 
   const officialRows = official.map((e, index) => {
-    return <OfficialRowStyled key={e.id + `${index}`}>
+    return <OfficialRowStyled key={e.id + `${index}`} onClick={() => navigate(`/album/${e.id}`)}>
       <ListCard data={e} />
       <SongList songs={e.tracks}/>
     </OfficialRowStyled>
   })
 
   const worldwideRows = worldwide.map((e, index) => {
-    return <ListCard data={e} isBigMode={true} key={e.id + `${index}`}/>
+    return <ListCard data={e} isBigMode={true} key={e.id + `${index}`} onClick={() => navigate(`/album/${e.id}`)}/>
   })
 
   return (

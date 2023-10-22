@@ -35,10 +35,10 @@ const CardWrapperStyled = styled.div`
   }
 `;
 
-const ListCard = ({data, isBigMode}) => {
+const ListCard = ({data, isBigMode, onClick}) => {
   // isBigMode用来区分卡片的大小模式
   const {updateFrequency, coverImgUrl} = data;
-  return <CardWrapperStyled $isBigMode={isBigMode}>
+  return <CardWrapperStyled $isBigMode={isBigMode} onClick={onClick}>
     <img src={coverImgUrl} alt="rank_card" className="cover"/>
     <div className="decorate"></div>
     <span className="bottomText">{updateFrequency}</span>
