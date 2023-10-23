@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 import Scroll from '../../components/scroll'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSingers, selectSingers } from '../../store/api/singersSlice'
-import { createReducer } from '@reduxjs/toolkit'
 import Loading from '../../components/loading'
+import { useNavigate } from 'react-router-dom'
 const ContainerWrapper = styled.div`
   .menu {
     margin-top: 5px;
@@ -40,9 +40,9 @@ const ListItemStyled = styled.li`
   }
 `
 
-const ListItem = ({ avatarUrl, singerName }) => {
+const ListItem = ({ avatarUrl, singerName, onClick }) => {
   return (
-    <ListItemStyled>
+    <ListItemStyled onClick={onClick}>
       <img src={avatarUrl} alt='singer' />
       <span className='singerName'>{singerName}</span>
     </ListItemStyled>
@@ -51,7 +51,7 @@ const ListItem = ({ avatarUrl, singerName }) => {
 const Singers = () => {
   const scrollRef = useRef();
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate();
   //查询所用的参数，交互会重新修改这些参数触发重新加载
   const [query, setQuery] = useState({
     category: null,
@@ -107,6 +107,7 @@ const Singers = () => {
         avatarUrl={e.picUrl + `?param=150x150`}
         singerName={e.name}
         key={e.id + `${index}`}
+        onClick={() => navigate(`/singer/${e.id}`)}
       />
     )
   })

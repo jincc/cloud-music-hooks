@@ -24,13 +24,18 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   height: 100%;
+  ${style.noWrap()}
+  margin-right: 16px;
   .name {
     color: ${style['font-color-desc']};
     font-size: ${style['font-size-l']};
+    ${style.noWrap()}
+
   }
   .description {
     color: ${style['font-color-desc-v2']};
     font-size: ${style['font-size-ss']};
+    ${style.noWrap()}
   }
   border-bottom: 1px solid ${style['border-color']};
 `

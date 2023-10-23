@@ -5,6 +5,7 @@ import rankSlice from "./api/rankSlice";
 import recommendSlice from "./api/recommendSlice";
 import searchSlice from "./api/searchSlice";
 import albumSlice from "./api/albumSlice";
+import singerDetailSlice from "./api/singerDetailSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ const store = configureStore({
     [rankSlice.name]: rankSlice.reducer,
     [recommendSlice.name]: recommendSlice.reducer,
     [searchSlice.name]: searchSlice.reducer,
-    [albumSlice.name]: albumSlice.reducer
+    [albumSlice.name]: albumSlice.reducer,
+    [singerDetailSlice.name]: singerDetailSlice.reducer
   },
   middleware: getDefaultMiddleware => {
     return getDefaultMiddleware().concat(cloudApi.middleware)

@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { fetchAlbumList, selectRecommend } from "../../store/api/recommendSlice"
 import style from '../../styles/global'
 import Album from './album'
+import { useNavigate } from "react-router-dom"
 
 const Container = styled.div`
   background-color: #fff;
@@ -24,8 +25,8 @@ const Container = styled.div`
 
 const AlbumList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {albums=[]} = useSelector(selectRecommend);
-  console.log(albums);
   useEffect(() => {
     dispatch(fetchAlbumList());
   }, []);
@@ -33,7 +34,9 @@ const AlbumList = () => {
   if (albums.length === 0) return <div></div>
 
   const albumsElems = albums.map((e, index) => {
-    return <Album album={e} key={e.id + index} />
+    return <Album album={e} key={e.id + index} onClick={() => {
+      navigate(`/album/${e.id}`)
+    }}/>
   })
   return <Container>
     <h2 className="header">推荐歌单</h2>

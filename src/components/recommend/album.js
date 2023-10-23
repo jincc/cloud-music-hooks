@@ -55,10 +55,10 @@ const Container = styled.div`
   }
 `;
 
-const AlbumCard = ({album}) => {
+const AlbumCard = ({album, onClick}) => {
   // isBigMode用来区分卡片的大小模式
   const {playCount, picUrl, name} = album;
-  return <Container>
+  return <Container onClick={onClick}>
     <img src={picUrl + "?param=300*200"} alt="rank_card" className="cover"/>
     <div className='title'>{name}</div>
 

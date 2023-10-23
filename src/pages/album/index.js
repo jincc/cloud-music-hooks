@@ -17,6 +17,11 @@ const Container = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+
+  .content {
+    //低于屏幕高度时，使其能够滚动
+    min-height: calc(100vh + 1px);
+  }
 `;
 
 const AlbumList = () => {
@@ -55,7 +60,7 @@ const AlbumList = () => {
     <Container>
       <BackHeader ref={backHeaderRef} title={playlist.name}/>
       <Scroll onScroll={onScroll}>
-        <div>
+        <div className='content'>
           <AlbumHeader album={playlist} />
           {songs}
         </div>
