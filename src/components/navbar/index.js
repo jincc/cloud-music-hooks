@@ -23,7 +23,7 @@ const Navbar = () => {
     <NavbarStyled>
       <div className='menu'>
         <span className='iconfont'>&#xe65c;</span>
-        <span className='title'>WebApp</span>
+        <span className='title'>云音乐</span>
         <span className='iconfont' onClick={handleClickSearch}>&#xe62b;</span>
       </div>
       <div className='tab'>
