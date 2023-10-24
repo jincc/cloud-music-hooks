@@ -1,5 +1,6 @@
 # 概述
 ![首页](./note-docs/home.png)
+
 网页云音乐H5项目, 技术栈:
 - React: 18
 - 状态管理: react-redux @reduxjs/toolkit
