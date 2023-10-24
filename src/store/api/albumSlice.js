@@ -10,7 +10,7 @@ export const fetchAlbumSongsList = createAsyncThunk('album/songlist',
 const albumSlice = createSlice({
   name: 'album',
   initialState: {
-    playlist: [],
+    playlist: null,
     loadding: false
   },
   reducers: {},

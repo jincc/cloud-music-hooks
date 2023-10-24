@@ -4,6 +4,8 @@ import style from '../../styles/global'
 import { useMemo } from 'react'
 import { useState } from 'react'
 import { getDefaultAlpha, getDefaultSingerCategory } from '../../utils/config'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectSingers, setAlpha, setCategory } from '../../store/api/singersSlice'
 
 const ContainerStyled = styled.div`
   display: flex;
@@ -44,43 +46,52 @@ const ContainerStyled = styled.div`
     display: none;
   }
 `
-// title表示列表左侧的说明
-// list表示为列表数据ß
-export const HorizontalList = ({list=[], title, onClick}) => {
-  const NOT_USE_ID = -100;
-  const [selectId, setSelectId] = useState(NOT_USE_ID);
-  const handleClick = (id) => {
-    let newId = selectId !== id ? id : NOT_USE_ID;
-    setSelectId(newId);
-    onClick && onClick(newId !== NOT_USE_ID ? newId : null);
-  }
+export const HotCategory = () => {
+  const dispatch = useDispatch();
+  const { query } = useSelector(selectSingers);
+
+  const list = useMemo(() => {
+    return getDefaultSingerCategory()
+  }, []);
 
   const elements = list.map((e, index) => {
-    const key = e.id || index
-    const className = selectId === e.id ? 'selected' : ''
-    return <li className={className} key={key} onClick={() => handleClick(e.id)}>{e.name || e}</li>
-  })
-  
+    const className = query.category === e.id ? 'selected' : ''
+    return (
+      <li className={className} key={index} onClick={() => dispatch(setCategory(e.id))}>
+        {e.name}
+      </li>
+    )
+  });
+
   return (
     <ContainerStyled>
-      { title ? <span className='title'>{title}</span> : null}
+      <span className='title'>分类(默认热门):</span>
       <ul className='list'>{elements}</ul>
     </ContainerStyled>
   )
 }
 
-export const HotCategory = ({onClick}) => {
-  const list = useMemo( () => {
-    return getDefaultSingerCategory()
-  }, []);
-  return <HorizontalList title={`分类(默认热门):`} list={list} onClick={onClick}/>
-}
+export const AlphaCategory = () => {
+  const dispatch = useDispatch();
+  const { query } = useSelector(selectSingers);
 
-
-export const AlphaCategory = ({onClick}) => {
   const list = useMemo(() => {
-    return getDefaultAlpha();
-  }, []);
-  return <HorizontalList title={`首字母:`} list={list} onClick={onClick}/>
-}
+    return getDefaultAlpha()
+  }, [])
 
+  const elements = list.map((e, index) => {
+    const className = query.alpha === e.id ? 'selected' : ''
+    return (
+      <li className={className} key={index} onClick={() => dispatch(setAlpha(e.id))}>
+        {e.name}
+      </li>
+    )
+  });
+
+  return (
+    <ContainerStyled>
+      <span className='title'>首字母:</span>
+      <ul className='list'>{elements}</ul>
+    </ContainerStyled>
+  )
+}

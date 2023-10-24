@@ -14,6 +14,12 @@ export const fetchSingers = createAsyncThunk('singers/query', async (query, thun
 const singersSlice = createSlice({
   name: 'singers',
   initialState: {
+    //页面选中的查询信息
+    query: {
+      category: null,
+      alpha: null,
+      offset: 0
+    },
     singers: [],
     loadding: false,
     error: null,
@@ -22,6 +28,15 @@ const singersSlice = createSlice({
     initialed: true,
   },
   reducers: {
+    setAlpha: (state, action) => {
+      state.query.alpha = action.payload;
+    },
+    setCategory: (state, action) => {
+      state.query.category = action.payload;
+    },
+    setOffset: (state, action) => {
+      state.query.offset = action.payload;
+    }
   },
   extraReducers: builder => {
     builder
@@ -48,8 +63,12 @@ const singersSlice = createSlice({
   }
 });
 
-export const { setCategory, setAlpha, setOffset } = singersSlice.actions;
-
 export const selectSingers = state => state.singers;
+
+export const {
+  setAlpha,
+  setCategory,
+  setOffset
+} = singersSlice.actions;
 
 export default singersSlice;

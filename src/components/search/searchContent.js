@@ -10,6 +10,7 @@ import {
 import AlbumItem from '../songlist/ablumItem'
 import SongItem from '../songlist/songItem'
 import { debounce } from '../../utils'
+import { useNavigate } from 'react-router-dom'
 
 const Container = styled.div`
   .sectionName {
@@ -30,6 +31,7 @@ const Container = styled.div`
 
 const SearchContent = ({ keyword }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const {
     searchResults: { artists=[], playlists=[], songs=[] }
   } = useSelector(selectSearchState)
@@ -48,6 +50,7 @@ const SearchContent = ({ keyword }) => {
           <AlbumItem
             picUrl={e.picUrl + '?params=300*300'}
             name={`歌单: ${e.name}`}
+            onClick={() => navigate(`/singer/${e.id}`)}
           />
         </div>
       )
@@ -69,6 +72,7 @@ const SearchContent = ({ keyword }) => {
           <AlbumItem
             picUrl={e.coverImgUrl + '?params=300*300'}
             name={`歌单: ${e.name}`}
+            onClick={() => navigate(`/album/${e.id}`)}
           />
         </div>
       )

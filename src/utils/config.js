@@ -29,7 +29,7 @@ export function getDefaultAlpha() {
   for (const char of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') {
     items.push({id: char, name: char});
   }
-  items.splice(0, 0, {id: null, name: '全部'})
+  items.splice(0, 0, {id: -1, name: '全部'})
   return items;
 }
 

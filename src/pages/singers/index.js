@@ -4,7 +4,7 @@ import style from '../../styles/global'
 import { useEffect, useRef, useState } from 'react'
 import Scroll from '../../components/scroll'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchSingers, selectSingers } from '../../store/api/singersSlice'
+import { fetchSingers, selectSingers, setOffset } from '../../store/api/singersSlice'
 import Loading from '../../components/loading'
 import { useNavigate } from 'react-router-dom'
 const ContainerWrapper = styled.div`
@@ -52,12 +52,6 @@ const Singers = () => {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  //查询所用的参数，交互会重新修改这些参数触发重新加载
-  const [query, setQuery] = useState({
-    category: null,
-    alpha: null,
-    offset: 0
-  })
   //loading状态机
   const [loading, setLoading] = useState({
     pullDown: false,
@@ -65,7 +59,7 @@ const Singers = () => {
   });
 
   // 查询歌手数据
-  const {singers, hasNext, loadding} = useSelector(selectSingers);
+  const {singers, hasNext, loadding, query} = useSelector(selectSingers);
   useEffect(() => {
     dispatch(fetchSingers(query))
     .then(v => {
@@ -78,25 +72,17 @@ const Singers = () => {
     });
   }, [dispatch, query]);
 
-  const handleClickCategory = category => {
-    setQuery({ ...query, category, offset: 0 });
-    scrollRef.current.refresh();
-  }
-  const handleClickAlpha = alpha => {
-    setQuery({ ...query, alpha, offset: 0 });
-    scrollRef.current.refresh();
-  }
   //下拉刷新
   const handlePulldown = () => {
-    console.log('pulldown')
-    setLoading({...loading, pullDown: true});
-    setQuery({...query, offset: 0});
+    if (query.offset !== 0) {
+      setLoading({...loading, pullDown: true});
+      dispatch(setOffset(0));
+    }
   }
 
   const handlePullup = () => {
-    console.log('pullup')
     if (hasNext) {
-      setQuery({...query, offset: singers.length});
+      dispatch(setOffset(singers.length));
       setLoading({...loading, pullUp: true});
     }
   }
@@ -115,8 +101,8 @@ const Singers = () => {
   return (
     <ContainerWrapper>
       <div className='menu'>
-        <HotCategory onClick={handleClickCategory} />
-        <AlphaCategory onClick={handleClickAlpha} />
+        <HotCategory />
+        <AlphaCategory />
       </div>
       {loadding ? <Loading /> : null}
       <ListContainer>

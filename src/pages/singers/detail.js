@@ -73,6 +73,7 @@ const Container = styled.div`
     background-color: #fff;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
+    min-height: calc(100% + 1px);
   }
 `
 
@@ -92,13 +93,14 @@ const SingerDetail = () => {
   }, [id])
   //获取图片原始高度
   useEffect(() => {
-    if (imageRef.current && scrollWrapperRef.current &&  scrollData.current.imageHeight === 0) {
+    //说明数据已经拉取完成
+    if (detail) {
       scrollData.current.imageHeight = imageRef.current.offsetHeight;
       scrollWrapperRef.current.style.top = `${imageRef.current.offsetHeight - 10}px`;
       scrollRef.current.refresh();
       console.log(imageRef.current.offsetHeight);
     }
-  })
+  }, [detail])
 
   if (loadding) {
     return <Spinner />

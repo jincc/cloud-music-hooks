@@ -32,7 +32,8 @@ const AlbumList = () => {
   useEffect(() => {
     dispatch(fetchAlbumSongsList(id))
   }, [])
-  if (loadding) {
+  
+  if (loadding || !playlist) {
     return <Spinner />
   }
 
