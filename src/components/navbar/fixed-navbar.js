@@ -11,7 +11,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   color: #fff;
-  z-index: 1;
+  z-index: 100;
   .icon {
     padding-left: 10px;
     font-size: 20px;
