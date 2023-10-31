@@ -13,6 +13,8 @@ import style from '../../styles/global'
 import Scroll from '../../components/scroll'
 import { useRef } from 'react'
 import { useState } from 'react'
+import Player from '../player'
+import { startSequencePlay } from '../../store/api/playerSlice'
 const HEADER_HEIGHT = 40
 
 const Container = styled.div`
@@ -133,6 +135,13 @@ const SingerDetail = () => {
     }
   }
 
+  const handleClickSong = (songs, index) => {
+    dispatch(startSequencePlay({
+      playlist: songs,
+      index: index
+    }));
+  }
+
   const { artist, hotSongs } = detail
 
   const songs = hotSongs.map((e, index) => {
@@ -143,6 +152,7 @@ const SingerDetail = () => {
         name={e.name}
         description={desc}
         index={index + 1}
+        onClick={() => handleClickSong(hotSongs, index)}
       />
     )
   })
@@ -165,6 +175,7 @@ const SingerDetail = () => {
           </div>
         </Scroll>
       </div>
+      <Player />
     </Container>
   )
 }

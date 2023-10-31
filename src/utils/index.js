@@ -70,7 +70,8 @@ export async function get(uri, params) {
   if (params) {
     query = '?' + buildQueryString(params);
   }
-  let response = await delay(1000).then(v => fetch(BASE_URL + uri + query));
+  let validUrl = uri.startsWith('http') ? uri : BASE_URL + uri + query;
+  let response = await delay(1000).then(v => fetch(validUrl));
   if (!response.ok) {
    throw new Error(response.statusText);
   };
