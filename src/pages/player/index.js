@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 import MiniPlayer from '../../components/player/mini'
-import { checkSongMp3AddressState, fetchLyric, selectPlayerState, setCurrentPlayTimeOffset, setPlayState } from '../../store/api/playerSlice'
+import { fetchLyric, playNext, selectPlayerState, setCurrentPlayTimeOffset, setOnReady, setPlayState, tryPlaySongThunk } from '../../store/api/playerSlice'
 import { useEffect } from 'react'
 import FullPlayer from '../../components/player/full'
 import { useRef } from 'react'
 import { useState } from 'react'
+import { checkMp3, getMp3Url } from '../../utils'
 
 /**
  * Mini-player功能点:
@@ -31,26 +32,22 @@ const Player = () => {
   const audioRef = useRef()
   const dispatch = useDispatch()
 
-  const { currentIndex, isFullScreen, playlist, isPlaying } =
+  const { currentIndex, isFullScreen, playlist, isPlaying, isReady } =
     useSelector(selectPlayerState)
-  //开始监听，如果currentIndex != -1代表有歌曲，开始播放
 
-  const hasSongToPlay = currentIndex !== -1
   useEffect(() => {
     if (currentIndex !== -1) {
       const fetchTask = async () => {
         const song = playlist[currentIndex];
-        const lyric = await dispatch(fetchLyric(song.id)).unwrap();
-        //获取歌曲成功，开始播放
-        await dispatch(setPlayState(true));
+        dispatch(tryPlaySongThunk(song.id));
       };
       fetchTask();
     }
-  }, [currentIndex, dispatch])
+  }, [currentIndex, dispatch, playlist])
 
   //是否开始播放
   useEffect(() => {
-    if (currentIndex === -1 ) return;
+    if (!isReady) return;
     try {
       if (isPlaying) {
         audioRef.current.play();
@@ -59,12 +56,11 @@ const Player = () => {
       } 
     } catch (error) {
       console.log(error);
-      error.preventDefault();
-      debugger
     }
-  }, [currentIndex, isPlaying]);
+  }, [isReady, isPlaying]);
 
-  if (!hasSongToPlay) {
+  //如果currentIndex != -1代表有歌曲，开始展示底部信息
+  if (currentIndex === -1) {
     return <></>
   }
   const song = playlist[currentIndex]
@@ -72,10 +68,11 @@ const Player = () => {
   //事件处理回调
   const handleError = e => {
     console.log(e)
-    // debugger
-    e.preventDefault();
+    // dispatch(playNext());
   }
-  const handleEnd = () => {}
+  const handleEnd = () => {
+    dispatch(playNext());
+  }
   const handleTimeUpdate = e => {
     //更新进度条
     dispatch(setCurrentPlayTimeOffset(e.target.currentTime));
@@ -85,7 +82,7 @@ const Player = () => {
       {player}
       <audio
         ref={audioRef}
-        src={`https://music.163.com/song/media/outer/url?id=${song.id}.mp3`}
+        src={getMp3Url(song.id)}
         onError={handleError}
         onEnded={handleEnd}
         onTimeUpdate={handleTimeUpdate}

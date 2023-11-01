@@ -1,26 +1,30 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { get } from "../../utils";
+import { checkMp3, get, getMp3Url } from "../../utils";
 // 当前播放模式
 const PlayMode = {
   SEQUENCE: 0,
   RANDOM: 1,
   LOOP: 2
 };
-// 获取歌词
-export const fetchLyric = createAsyncThunk('player/lyric', 
-  async (id) => {
-    const result = await get(`/lyric?id=${id}`);
-    return result;
-});
+// // 获取歌词
+// export const fetchLyricThunk = createAsyncThunk('player/lyric', 
+//   async (id) => {
+//     const result = await get(`/lyric?id=${id}`);
+//     return result;
+// });
 
-//判断歌曲是否可播放
-export const checkSongMp3AddressState = createAsyncThunk('player/state', 
-  async (id) => {
-    const result = await fetch(`https://music.163.com/song/media/outer/url?id=${id}.mp3`, {
-      mode: 'no-cors'
-    });
-    console.log(result);
-    return result;
+//尝试播放歌曲，不能播放的话，切到下一首
+export const tryPlaySongThunk = createAsyncThunk('player/play',
+  async (id, {dispatch, getState}) => {
+    await dispatch(setOnReady(false));
+    if (await checkMp3(getMp3Url(id))) {
+      // const lyric = await dispatch(fetchLyricThunk(id)).unwrap();
+      // console.log(lyric);
+      await dispatch(setOnReady(true));
+    } else {
+      //开始下一首播放
+      await dispatch(playNext());
+    }
 });
 
 
@@ -35,6 +39,8 @@ const playerSlice = createSlice({
     currentIndex: -1,
     //播放状态
     isPlaying: false,
+    //是否准备好播放，开始播放之前会经历 地址校验和歌词获取
+    isReady: false,
     //播放模式(交互)
     mode: PlayMode.SEQUENCE,
     //是否展示播放列表(交互)
@@ -58,6 +64,10 @@ const playerSlice = createSlice({
     setPlayState: (state, action) => {
       state.isPlaying = action.payload;
     },
+    setOnReady: (state, action) => {
+      state.isReady = action.payload;
+      state.isPlaying = action.payload;
+    },
     //当前播放进度
     setCurrentPlayTimeOffset: (state, action) => {
       const { currentIndex, playlist} = state;
@@ -66,17 +76,33 @@ const playerSlice = createSlice({
         const progress = action.payload * 1000 / song.dt;
         state.progress = progress;
       }
+    },
+    //播放下一首
+    playNext: (state, action) => {
+      let {mode, currentIndex, playlist} = state;
+      switch (mode) {
+        case PlayMode.SEQUENCE:
+          currentIndex += 1;
+          if (currentIndex === playlist.length) {
+            currentIndex = 0;
+          }
+          state.currentIndex = currentIndex;
+          break;
+      
+        default:
+          break;
+      }
     }
   },
   extraReducers: builder => {
-    builder.addCase(fetchLyric.fulfilled, (state, action) => {
-      state.lyric = action.payload;
-    })
+    // builder.addCase(fetchLyricThunk.fulfilled, (state, action) => {
+    //   state.lyric = action.payload;
+    // })
   }
 });
 
 export default playerSlice;
 
-export const { startSequencePlay, setPlayState, setCurrentPlayTimeOffset } = playerSlice.actions;
+export const { startSequencePlay, setOnReady, setPlayState, setCurrentPlayTimeOffset, playNext } = playerSlice.actions;
 
 export const selectPlayerState = state => state.player;

@@ -86,3 +86,28 @@ export function formatPlayCount(count) {
   }
   return Math.floor(count / 10000000) / 10 + '亿';
 }
+
+export function getMp3Url(songId) {
+  return `https://music.163.com/song/media/outer/url?id=${songId}.mp3`;
+}
+
+/**
+ * 监测mp3地址是否是可播放地址
+ * @param {*} url 
+ */
+export function checkMp3(url) {
+  return new Promise((resolve, reject) => {
+    var audio = new Audio();
+    audio.src = url;
+  
+    audio.addEventListener('canplaythrough', function() {
+      resolve(true);
+    });
+  
+    audio.addEventListener('error', function() {
+      resolve(false);
+    });
+  
+    audio.load();
+  });
+}
