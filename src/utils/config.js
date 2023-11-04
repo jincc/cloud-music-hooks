@@ -34,3 +34,29 @@ export function getDefaultAlpha() {
 }
 
 export const BASE_URL = 'http://localhost:3300';
+// 当前播放模式
+export const PlayMode = {
+  SEQUENCE: 0,
+  RANDOM: 1,
+  LOOP: 2
+};
+// 获取播放模式的iconfont
+export function getPlaymodeIconfont(mode) {
+  switch (mode) {
+    case PlayMode.SEQUENCE:
+      return {
+        icon: "&#xe625;",
+        title: '顺序播放'
+      }
+    case PlayMode.RANDOM:
+      return {
+        icon: "&#xe61b;",
+        title: '循环播放'
+      }
+    default:
+      return {
+        icon: "&#xe653;",
+        title: '单曲播放'
+      }
+  }
+}

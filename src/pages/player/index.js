@@ -68,7 +68,6 @@ const Player = () => {
   //事件处理回调
   const handleError = e => {
     console.log(e)
-    // dispatch(playNext());
   }
   const handleEnd = () => {
     dispatch(playNext());

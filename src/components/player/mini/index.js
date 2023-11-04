@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Container } from './style'
-import { selectPlayerState, setPlayState } from '../../../store/api/playerSlice'
+import { selectPlayerState, setPlayState, setShowPlayList } from '../../../store/api/playerSlice'
 import Progressbar from '../../progressbar/circularbar'
+import PlayList from '../playlist'
 
 const MiniPlayer = () => {
   const dispatch = useDispatch()
-  const { currentIndex, playlist, isPlaying, progress } = useSelector(selectPlayerState)
+  const { currentIndex, playlist, isPlaying, progress, isShowPlayList } = useSelector(selectPlayerState)
   const song = playlist[currentIndex]
   const coverUrl = song.al.picUrl
   const name = song.name
@@ -15,6 +16,9 @@ const MiniPlayer = () => {
   //事件处理
   const handleClickPlay = () => {
     dispatch(setPlayState(!isPlaying))
+  }
+  const handleClickPlaylist = () => {
+    dispatch(setShowPlayList(!isShowPlayList))
   }
   return (
     <Container $isPlaying={isPlaying}>
@@ -33,7 +37,8 @@ const MiniPlayer = () => {
           }}
         />
       </Progressbar>
-      <span className='iconfont playlist'>&#xe640;</span>
+      <span className='iconfont playlist' onClick={handleClickPlaylist}>&#xe640;</span>
+      { isShowPlayList ? <PlayList /> : null}
     </Container>
   )
 }
