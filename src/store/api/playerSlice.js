@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { checkMp3, getMp3Url } from '../../utils'
+import { checkMp3, getMp3Url, shuffleSongList } from '../../utils'
 import { PlayMode } from '../../utils/config'
 
 // // 获取歌词
@@ -119,6 +119,10 @@ const playerSlice = createSlice({
         currentIndex = 0
       }
       state.currentIndex = currentIndex
+      // 循环模式下，拷贝下playlist 用来触发歌曲重新播放
+      if (state.mode === PlayMode.LOOP) {
+        state.playlist = [...state.playlist]
+      }
     },
     playPrev: (state, action) => {
       let { currentIndex, playlist } = state
@@ -127,6 +131,35 @@ const playerSlice = createSlice({
         currentIndex = playlist.length - 1
       }
       state.currentIndex = currentIndex
+      if (state.mode === PlayMode.LOOP) {
+        state.playlist = [...state.playlist]
+      }
+    },
+    //切换播放模式
+    switchPlayMode: (state, action) => {
+      const {mode, currentIndex, playlist} = state;
+      const currentSongId = playlist[currentIndex].id;
+      const newMode = (mode + 1) % 3;
+      switch (newMode) {
+        case PlayMode.SEQUENCE:
+          state.playlist = state.originPlayList;
+          state.currentIndex = state.playlist.findIndex(e => e.id === currentSongId);
+          break;
+        case PlayMode.LOOP:
+          state.playlist = [playlist[currentIndex]];
+          state.currentIndex = 0;
+          break;
+
+        case PlayMode.RANDOM:
+          state.playlist = shuffleSongList(state.originPlayList);
+          state.currentIndex = state.playlist.findIndex(e => e.id === currentSongId);
+          break;
+          
+        default:
+          break;
+      }
+
+      state.mode = newMode;
     }
   },
   extraReducers: builder => {
@@ -150,7 +183,8 @@ export const {
   playPrev,
   deleteAll,
   setFullScreen,
-  setProgress
+  setProgress,
+  switchPlayMode
 } = playerSlice.actions
 
 export const selectPlayerState = state => state.player

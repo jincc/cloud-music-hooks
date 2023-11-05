@@ -18,7 +18,7 @@ const Container = styled.div`
   .name {
     padding-left: 10px;
     font-size: ${style["font-size-m"]};
-    color: ${style["font-color-desc-v2"]};
+    color: ${props => props.$isPlaying ? style["theme-color"] : style["font-color-desc-v2"]};
   }
   .flex {
     flex: 1;
@@ -40,7 +40,7 @@ const SongCell = ({isPlaying, data, index}) => {
 
   }
 
-  return <Container onClick={handleClickPlay}>
+  return <Container onClick={handleClickPlay} $isPlaying={isPlaying}>
     {isPlaying && <span className="iconfont play">&#xe731;</span>}
     <span className="name">{name}</span>
     <span className="flex"></span>

@@ -123,3 +123,23 @@ export function formatPlaytime(time) {
   const s = `${Math.floor(time % 60)}`.padStart(2, '0');
   return `${m}:${s}`;
 }
+
+function getRandomIndex(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+/**
+ * 随机打乱歌曲列表
+ * @param {*} playlist 
+ */
+export function shuffleSongList(playlist) {
+  if (playlist.length === 0 ) return [];
+
+  for (let index = playlist.length - 1; index > 0; index--){
+    const from = getRandomIndex(0, index-1);
+    const to = index;
+    const t = playlist[from];
+    playlist[from] = playlist[to];
+    playlist[to] = t;
+  }
+  return [...playlist];
+}

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import style from '../../../styles/global';
-import { deleteAll, selectPlayerState } from "../../../store/api/playerSlice";
+import { deleteAll, selectPlayerState, switchPlayMode } from "../../../store/api/playerSlice";
 import { getPlaymodeIconfont } from "../../../utils/config";
 const HeaderStyled = styled.div`
   display: flex;
@@ -31,9 +31,12 @@ const Header = () => {
   const handleTrashAll = () => {
     dispatch(deleteAll());
   }
+  const handleSwitchPlaymode = () => {
+    dispatch(switchPlayMode())
+  }
 
   return <HeaderStyled>
-    <span className="iconfont mode-icon" dangerouslySetInnerHTML={{
+    <span className="iconfont mode-icon" onClick={handleSwitchPlaymode} dangerouslySetInnerHTML={{
       __html: icon
     }}></span>
     <span className="mode-title">{title}</span>

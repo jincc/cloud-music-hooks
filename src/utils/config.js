@@ -40,6 +40,8 @@ export const PlayMode = {
   RANDOM: 1,
   LOOP: 2
 };
+
+
 // 获取播放模式的iconfont
 export function getPlaymodeIconfont(mode) {
   switch (mode) {
@@ -51,7 +53,7 @@ export function getPlaymodeIconfont(mode) {
     case PlayMode.RANDOM:
       return {
         icon: "&#xe61b;",
-        title: '循环播放'
+        title: '随机播放'
       }
     default:
       return {

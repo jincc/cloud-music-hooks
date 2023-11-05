@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import style from '../../styles/global'
 import { formatPlaytime } from '../../utils'
 import { useRef } from 'react'
+import { useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -17,7 +19,7 @@ const Container = styled.div`
     background-color: ${style['background-color-shadow']};
     position: relative;
     .progress {
-      width: ${props => props.$percent};
+      width: 0;
       height: 100%;
       background-color: ${style['theme-color']};
       position: absolute;
@@ -31,7 +33,7 @@ const Container = styled.div`
       height: 12px;
       border-radius: 50%;
       position: absolute;
-      left: ${props => props.$percent};
+      left: 0;
       top: -7px;
       border: 3px solid #fff;
     }
@@ -45,9 +47,21 @@ const Container = styled.div`
  */
 const LineProgress = ({ progress = 0, totalTime, onPercentChanged }) => {
   const progressWrapperRef = useRef()
+  const progressRef = useRef()
+  const potRef = useRef()
   const touch = useRef({});
-  const percent = (touch.current.initiated ? touch.current.progress : progress) * 100 + '%'
+  progress = touch.current.initiated ? touch.current.progress : progress;
+  const percent = progress * 100 + '%'
   const currentTime = Math.ceil(progress * totalTime)
+  useEffect(() => {
+    // calc(${props => props.$percent} - 15px)
+    progressRef.current.style.width = percent;
+    if (progressWrapperRef.current.clientWidth * (1 - progress) < 15) {
+      potRef.current.style.left = `calc(${progressWrapperRef.current.clientWidth}px - 15px)`;
+    } else {
+      potRef.current.style.left = percent;
+    }
+  }, [percent, progress]);
   const handleClickProgress = e => {
     const rect = progressWrapperRef.current.getBoundingClientRect()
     const offset = e.pageX - rect.left
@@ -69,7 +83,7 @@ const LineProgress = ({ progress = 0, totalTime, onPercentChanged }) => {
     const currentX = touch.current.startProgress * barWidth + deltaX;
     const percent = currentX / barWidth;
     touch.current.progress = percent;
-    console.log(percent);
+    // console.log(percent);
   }
   const onTouchEnd = e => {
     touch.current.initiated = false;
@@ -83,8 +97,9 @@ const LineProgress = ({ progress = 0, totalTime, onPercentChanged }) => {
         ref={progressWrapperRef}
         onClick={handleClickProgress}
       >
-        <div className='progress'></div>
+        <div className='progress' ref={progressRef}></div>
         <div
+          ref={potRef}
           className='pot'
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
