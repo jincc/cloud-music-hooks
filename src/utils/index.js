@@ -111,3 +111,15 @@ export function checkMp3(url) {
     audio.load();
   });
 }
+/**
+ * 可视化播放时间
+ * @param {*} time 
+ */
+export function formatPlaytime(time) {
+  if (!time) return "--"
+
+  time = Math.floor(Number(time/1000));
+  const m = Math.floor(time/60);
+  const s = `${Math.floor(time % 60)}`.padStart(2, '0');
+  return `${m}:${s}`;
+}

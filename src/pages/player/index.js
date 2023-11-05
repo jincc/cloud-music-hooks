@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import FullPlayer from '../../components/player/full'
 import { useRef } from 'react'
 import { useState } from 'react'
-import { checkMp3, getMp3Url } from '../../utils'
+import { checkMp3, debounce, getMp3Url } from '../../utils'
 
 /**
  * Mini-player功能点:
@@ -63,8 +63,7 @@ const Player = () => {
   if (currentIndex === -1) {
     return <></>
   }
-  const song = playlist[currentIndex]
-  const player = isFullScreen ? <FullPlayer /> : <MiniPlayer />
+
   //事件处理回调
   const handleError = e => {
     console.log(e)
@@ -72,10 +71,19 @@ const Player = () => {
   const handleEnd = () => {
     dispatch(playNext());
   }
-  const handleTimeUpdate = e => {
+  const _handleTimeUpdate = e => {
     //更新进度条
     dispatch(setCurrentPlayTimeOffset(e.target.currentTime));
   }
+  // 创建防抖函数，防止进度条抖动太快
+  const handleTimeUpdate = debounce(_handleTimeUpdate, 1000)
+  const song = playlist[currentIndex]
+  const handlePercentChanged = (percent) => {
+    
+    audioRef.current.currentTime = percent * song.dt / 1000;
+  }
+  const player = isFullScreen ? <FullPlayer onPercentChanged={handlePercentChanged}/> : <MiniPlayer />
+
   return (
     <>
       {player}

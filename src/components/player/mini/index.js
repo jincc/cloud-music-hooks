@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Container } from './style'
-import { selectPlayerState, setPlayState, setShowPlayList } from '../../../store/api/playerSlice'
-import Progressbar from '../../progressbar/circularbar'
+import { selectPlayerState, setFullScreen, setPlayState, setShowPlayList } from '../../../store/api/playerSlice'
+import Progressbar from '../../progressbar/circularProgress'
 import PlayList from '../playlist'
 
 const MiniPlayer = () => {
@@ -14,15 +14,20 @@ const MiniPlayer = () => {
   const playIcon = isPlaying ? '&#xe650;' : '&#xe61e;'
 
   //事件处理
-  const handleClickPlay = () => {
+  const handleClickPlay = (e) => {
+    e.stopPropagation();
     dispatch(setPlayState(!isPlaying))
   }
-  const handleClickPlaylist = () => {
+  const handleClickPlaylist = (e) => {
+    e.stopPropagation();
     dispatch(setShowPlayList(!isShowPlayList))
+  }
+  const handleClickFullscreen = () => {
+    dispatch(setFullScreen(true))
   }
   return (
     <Container $isPlaying={isPlaying}>
-      <img className='cover paused-state' src={coverUrl} alt='cover' />
+      <img className='cover paused-state' src={coverUrl} alt='cover' onClick={handleClickFullscreen}/>
       <div className='song-info'>
         <span className='name'>{name}</span>
         <span className='singer'>{singer}</span>

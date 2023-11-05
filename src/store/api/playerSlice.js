@@ -90,6 +90,9 @@ const playerSlice = createSlice({
     setShowPlayList: (state, action) => {
       state.isShowPlayList = action.payload
     },
+    setFullScreen: (state, action) => {
+      state.isFullScreen = action.payload
+    },
     //设置ready状态
     setOnReady: (state, action) => {
       state.isReady = action.payload
@@ -104,21 +107,26 @@ const playerSlice = createSlice({
         state.progress = progress
       }
     },
+    //通过手势更新播放进度
+    setProgress: (state, action) => {
+      state.progress = action.payload;
+    },
     //播放下一首
     playNext: (state, action) => {
-      let { mode, currentIndex, playlist } = state
-      switch (mode) {
-        case PlayMode.SEQUENCE:
-          currentIndex += 1
-          if (currentIndex === playlist.length) {
-            currentIndex = 0
-          }
-          state.currentIndex = currentIndex
-          break
-
-        default:
-          break
+      let { currentIndex, playlist } = state
+      currentIndex += 1
+      if (currentIndex === playlist.length) {
+        currentIndex = 0
       }
+      state.currentIndex = currentIndex
+    },
+    playPrev: (state, action) => {
+      let { currentIndex, playlist } = state
+      currentIndex -= 1
+      if (currentIndex === -1) {
+        currentIndex = playlist.length - 1
+      }
+      state.currentIndex = currentIndex
     }
   },
   extraReducers: builder => {
@@ -139,7 +147,10 @@ export const {
   setPlayState,
   setCurrentPlayTimeOffset,
   playNext,
-  deleteAll
+  playPrev,
+  deleteAll,
+  setFullScreen,
+  setProgress
 } = playerSlice.actions
 
 export const selectPlayerState = state => state.player
