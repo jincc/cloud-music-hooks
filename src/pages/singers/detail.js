@@ -12,8 +12,6 @@ import BackHeader from '../../components/navbar/fixed-navbar'
 import style from '../../styles/global'
 import Scroll from '../../components/scroll'
 import { useRef } from 'react'
-import { useState } from 'react'
-import Player from '../player'
 import { startSequencePlay } from '../../store/api/playerSlice'
 const HEADER_HEIGHT = 40
 
@@ -175,7 +173,6 @@ const SingerDetail = () => {
           </div>
         </Scroll>
       </div>
-      <Player />
     </Container>
   )
 }

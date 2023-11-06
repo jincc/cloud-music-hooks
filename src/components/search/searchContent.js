@@ -11,6 +11,7 @@ import AlbumItem from '../songlist/ablumItem'
 import SongItem from '../songlist/songItem'
 import { debounce } from '../../utils'
 import { useNavigate } from 'react-router-dom'
+import { tryPlayAndInsertSong } from '../../store/api/playerSlice'
 
 const Container = styled.div`
   .sectionName {
@@ -33,7 +34,7 @@ const SearchContent = ({ keyword }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {
-    searchResults: { artists=[], playlists=[], songs=[] }
+    searchResults: { artists = [], playlists = [], songs = [] }
   } = useSelector(selectSearchState)
   // console.log(searchResults, keyword);
 
@@ -90,13 +91,18 @@ const SearchContent = ({ keyword }) => {
 
     const childs = songs.map((e, index) => {
       const description = `${e.artists[0].name} - ${e.album.name}`
-      return <SongItem name={e.name} description={description} key={index}/>
+      return (
+        <SongItem
+          name={e.name}
+          description={description}
+          key={index}
+          onClick={() => {
+            dispatch(tryPlayAndInsertSong(e.id))
+          }}
+        />
+      )
     })
-    return (
-      <div>
-        {childs}
-      </div>
-    )
+    return <div>{childs}</div>
   }, [])
 
   return (

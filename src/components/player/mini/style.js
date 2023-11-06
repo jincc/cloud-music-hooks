@@ -76,4 +76,30 @@ export const Container = styled.div`
     margin-left: 15px;
   }
 
+
+  /* &.move-enter, &.move-appear {
+    bottom: -100%;
+  }
+  &.move-enter-active, &.move-appear-active {
+    bottom: 0;
+    transition: all 300ms ease-out;
+  }
+  &.move-exit {
+    bottom: 0;
+  }
+  &.move-exit-active, &.move-exit-done {
+    bottom: -100%;
+    transition: all 300ms ease-out;
+  } */
+  &.move-appear {
+    bottom: -60px;
+  }
+  &.move-appear-active{
+    bottom: 0; 
+    transition: all 200ms ease;
+  }
+  &.move-exit-active, &.move-exit-done {
+    bottom: -60px;
+    transition: all 200ms ease;
+  }
 `;

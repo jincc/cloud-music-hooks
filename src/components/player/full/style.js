@@ -78,4 +78,21 @@ export const Container = styled.div`
         props.$isPlaying ? 'running' : 'paused'};
     }
   }
+
+
+  &.move-enter, &.move-appear {
+    bottom: -100vh;
+    opacity: 0;
+  }
+  &.move-enter-active, &.move-appear-active{
+    bottom: 0;
+    opacity: 1;
+    transition: all 300ms ease-out;
+  }
+  &.move-exit-active, &.move-exit-done {
+    /* bottom: -100vh; */
+    opacity: 0;
+    transition: all 300ms ease-out;
+  }
+  
 `

@@ -57,7 +57,7 @@ const Menu = ({song, onPercentChanged}) => {
     toastRef.current.show(msg)
   }
 
-  return <Container>
+  return <Container className="menu">
     <LineProgress totalTime={song.dt} progress={progress} onPercentChanged={onPercentChanged}/>
     <div className="btns">
       <span className="iconfont" onClick={handleSwitchPlayMode} dangerouslySetInnerHTML={{

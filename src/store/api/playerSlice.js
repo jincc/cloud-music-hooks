@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { checkMp3, getMp3Url, shuffleSongList } from '../../utils'
+import { checkMp3, get, getMp3Url, shuffleSongList } from '../../utils'
 import { PlayMode } from '../../utils/config'
 
 // // 获取歌词
@@ -25,7 +25,17 @@ export const tryPlaySongThunk = createAsyncThunk(
   }
 )
 
-const initialState =  {
+export const tryPlayAndInsertSong = createAsyncThunk(
+  'play/insert',
+  async (id, { dispatch, getState }) => {
+    const result = await get(`/song/detail?ids=${id}`)
+    if (result.songs.length > 0) {
+      dispatch(playAndInsertSong(result.songs[0]))
+    }
+  }
+)
+
+const initialState = {
   //元素播放列表，后续会通过mode改变playlist
   originPlayList: [],
   //存储播放列表
@@ -46,7 +56,7 @@ const initialState =  {
   lyric: null,
   //播放进度
   progress: 0
-};
+}
 const playerSlice = createSlice({
   name: 'player',
   initialState,
@@ -54,34 +64,88 @@ const playerSlice = createSlice({
     // 歌手页点击歌曲时，初始播放状态
     startSequencePlay: (state, action) => {
       const { playlist, index } = action.payload
-      state.originPlayList = playlist
-      state.currentIndex = index
-      state.playlist = playlist
+
+      if (state.playlist.length === 0) {
+        state.originPlayList = playlist
+        state.currentIndex = index
+        state.playlist = playlist
+      } else {
+        const currentSongId = playlist[index].id
+
+        playlist.forEach(element => {
+          if (
+            state.playlist.findIndex(e => {
+              return e.id === element.id
+            }) === -1
+          ) {
+            state.playlist.push(element)
+          }
+          if (
+            state.originPlayList.findIndex(e => {
+              return e.id === element.id
+            }) === -1
+          ) {
+            state.originPlayList.push(element)
+          }
+        })
+        
+        state.currentIndex = state.playlist.findIndex(e => e.id === currentSongId);
+      }
     },
     //播放状态
     setPlayState: (state, action) => {
       state.isPlaying = action.payload
     },
     deleteCurrentIndex: (state, action) => {
-      const willDeletePlaylistIndex  = action.payload;
-      const isPlayingSong = willDeletePlaylistIndex === state.currentIndex;
-      const deleteSong = state.playlist[willDeletePlaylistIndex];
+      const willDeletePlaylistIndex = action.payload
+      const isPlayingSong = willDeletePlaylistIndex === state.currentIndex
+      const deleteSong = state.playlist[willDeletePlaylistIndex]
       //从原始列表中删除
-      state.originPlayList.splice(state.originPlayList.findIndex(e => e.id === deleteSong.id), 1);
+      state.originPlayList.splice(
+        state.originPlayList.findIndex(e => e.id === deleteSong.id),
+        1
+      )
       if (isPlayingSong) {
-        state.playlist.splice(willDeletePlaylistIndex, 1);
+        state.playlist.splice(willDeletePlaylistIndex, 1)
       } else {
-        state.playlist.splice(willDeletePlaylistIndex, 1);
+        state.playlist.splice(willDeletePlaylistIndex, 1)
         //判断删除的歌曲在前还是在后
         if (willDeletePlaylistIndex > state.currentIndex) {
           //无需更新currentindex
         } else {
-          state.currentIndex--;
+          state.currentIndex--
         }
       }
     },
+    //在当前位置插入歌曲
+    playAndInsertSong: (state, action) => {
+      const { currentIndex, playlist, originPlayList } = state
+      const song = action.payload
+      if (currentIndex !== -1) {
+        const currentSong = playlist[currentIndex]
+
+        if (playlist.findIndex(e => e.id === song.id) === -1) {
+          playlist.splice(currentIndex, 0, song)
+        }
+
+        if (originPlayList.findIndex(e => e.id === song.id) === -1) {
+          originPlayList.splice(
+            originPlayList.findIndex(e => e.id === currentSong.id),
+            0,
+            song
+          )
+        }
+
+        // 更新播放下标
+        state.currentIndex = playlist.findIndex(e => e.id === song.id);
+      } else {
+        state.originPlayList = [song]
+        state.playlist = [song]
+        state.currentIndex = 0
+      }
+    },
     deleteAll: (state, action) => {
-      return initialState;
+      return initialState
     },
     setCurrentIndex: (state, action) => {
       state.currentIndex = action.payload
@@ -109,7 +173,7 @@ const playerSlice = createSlice({
     },
     //通过手势更新播放进度
     setProgress: (state, action) => {
-      state.progress = action.payload;
+      state.progress = action.payload
     },
     //播放下一首
     playNext: (state, action) => {
@@ -137,29 +201,33 @@ const playerSlice = createSlice({
     },
     //切换播放模式
     switchPlayMode: (state, action) => {
-      const {mode, currentIndex, playlist} = state;
-      const currentSongId = playlist[currentIndex].id;
-      const newMode = (mode + 1) % 3;
+      const { mode, currentIndex, playlist } = state
+      const currentSongId = playlist[currentIndex].id
+      const newMode = (mode + 1) % 3
       switch (newMode) {
         case PlayMode.SEQUENCE:
-          state.playlist = state.originPlayList;
-          state.currentIndex = state.playlist.findIndex(e => e.id === currentSongId);
-          break;
+          state.playlist = state.originPlayList
+          state.currentIndex = state.playlist.findIndex(
+            e => e.id === currentSongId
+          )
+          break
         case PlayMode.LOOP:
-          state.playlist = [playlist[currentIndex]];
-          state.currentIndex = 0;
-          break;
+          state.playlist = [playlist[currentIndex]]
+          state.currentIndex = 0
+          break
 
         case PlayMode.RANDOM:
-          state.playlist = shuffleSongList(state.originPlayList);
-          state.currentIndex = state.playlist.findIndex(e => e.id === currentSongId);
-          break;
-          
+          state.playlist = shuffleSongList(state.originPlayList)
+          state.currentIndex = state.playlist.findIndex(
+            e => e.id === currentSongId
+          )
+          break
+
         default:
-          break;
+          break
       }
 
-      state.mode = newMode;
+      state.mode = newMode
     }
   },
   extraReducers: builder => {
@@ -184,7 +252,8 @@ export const {
   deleteAll,
   setFullScreen,
   setProgress,
-  switchPlayMode
+  switchPlayMode,
+  playAndInsertSong
 } = playerSlice.actions
 
 export const selectPlayerState = state => state.player

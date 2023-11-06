@@ -4,6 +4,7 @@ import { GlobalStyle } from './styles/global'
 import routes from './routes'
 import { Provider } from 'react-redux'
 import store from './store'
+import Player from './pages/player'
 
 function App () {
   return (
@@ -12,6 +13,7 @@ function App () {
       <IconStyle />
       <Provider store={store}>
         <RouterProvider router={routes}></RouterProvider>
+        <Player />
       </Provider>
     </>
   )

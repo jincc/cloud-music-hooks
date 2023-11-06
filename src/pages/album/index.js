@@ -11,6 +11,7 @@ import Spinner from '../../components/spinner'
 import BackHeader from '../../components/navbar/fixed-navbar'
 import SongItem from '../../components/songlist/songItem'
 import Scroll from '../../components/scroll'
+import { startSequencePlay } from '../../store/api/playerSlice'
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -22,44 +23,59 @@ const Container = styled.div`
     //低于屏幕高度时，使其能够滚动
     min-height: calc(100vh + 1px);
   }
-`;
+`
 
 const AlbumList = () => {
-  const backHeaderRef = useRef();
+  const backHeaderRef = useRef()
   const { id } = useParams()
   const dispatch = useDispatch()
   const { playlist, loadding } = useSelector(selectAlbumState)
   useEffect(() => {
     dispatch(fetchAlbumSongsList(id))
   }, [])
-  
+
   if (loadding || !playlist) {
     return <Spinner />
   }
 
-  const onScroll = (e) => {
-    let opacity = 0;
+  const onScroll = e => {
+    let opacity = 0
     if (e.y <= -44) {
       //隐藏
-      opacity = 0;
-    } else if (e.y > -44 && e.y < 0){
-      opacity = 1 - Math.abs(e.y) / 44;
+      opacity = 0
+    } else if (e.y > -44 && e.y < 0) {
+      opacity = 1 - Math.abs(e.y) / 44
     } else {
-      opacity = 1;
+      opacity = 1
     }
-    backHeaderRef.current.setOpacity(opacity);
+    backHeaderRef.current.setOpacity(opacity)
+  }
+
+  const handleClickSong = (songs, index) => {
+    dispatch(
+      startSequencePlay({
+        playlist: songs,
+        index: index
+      })
+    )
   }
 
   const songs = (playlist.tracks || []).map((e, index) => {
     const desc = `${e.ar[0].name} - ${e.al.name}`
     return (
-      <SongItem key={e.id} name={e.name} description={desc} index={index + 1}></SongItem>
+      <SongItem
+        key={e.id}
+        name={e.name}
+        description={desc}
+        index={index + 1}
+        onClick={() => handleClickSong(playlist.tracks, index)}
+      ></SongItem>
     )
   })
 
   return (
     <Container>
-      <BackHeader ref={backHeaderRef} title={playlist.name}/>
+      <BackHeader ref={backHeaderRef} title={playlist.name} />
       <Scroll onScroll={onScroll}>
         <div className='content'>
           <AlbumHeader album={playlist} />
