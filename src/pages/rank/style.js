@@ -1,11 +1,7 @@
 import styled from 'styled-components'
 import style from '../../styles/global'
 export const RankWapperStyled = styled.div`
-  position: fixed;
-  top: 90px;
-  width: 100%;
-  bottom: 0;
-  overflow: auto;
+  ${style.hiddenScrollBar()}
   .area {
     padding: 10px 5px;
     h2 {
@@ -24,7 +20,7 @@ export const OfficialRowStyled = styled.div`
   flex-direction: row;
   border-bottom: 1px solid ${style['border-color']};
   padding: 10px 0 3px 0;
-`;
+`
 
 export const WorldwideWapperStyled = styled.div`
   display: flex;
@@ -36,4 +32,4 @@ export const WorldwideWapperStyled = styled.div`
     content: '';
     width: 32vw;
   }
-`;
+`

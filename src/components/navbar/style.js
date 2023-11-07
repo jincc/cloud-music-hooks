@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import style from '../../styles/global';
 export const NavbarStyled = styled.div`
   background: ${style['theme-color']};
-
   .menu {
     display: flex;
     flex-direction: row;

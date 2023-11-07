@@ -4,22 +4,27 @@ import style from '../../styles/global'
 import { useEffect, useRef, useState } from 'react'
 import Scroll from '../../components/scroll'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchSingers, selectSingers, setOffset } from '../../store/api/singersSlice'
+import {
+  fetchSingers,
+  selectSingers,
+  setOffset
+} from '../../store/api/singersSlice'
 import Loading from '../../components/loading'
 import { useNavigate } from 'react-router-dom'
+import HomeLayout from '../home/layout'
 const ContainerWrapper = styled.div`
   .menu {
     margin-top: 5px;
   }
-`
 
-const ListContainer = styled.div`
-  padding-top: 10px;
-  position: fixed;
-  top: 150px;
-  bottom: 0;
-  width: 100%;
-  overflow: hidden;
+  .content {
+    padding-top: 10px;
+    position: absolute;
+    top: 58px;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+  }
 `
 
 const ListItemStyled = styled.li`
@@ -49,41 +54,40 @@ const ListItem = ({ avatarUrl, singerName, onClick }) => {
   )
 }
 const Singers = () => {
-  const scrollRef = useRef();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const scrollRef = useRef()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   //loading状态机
   const [loading, setLoading] = useState({
     pullDown: false,
     pullUp: false
-  });
+  })
 
   // 查询歌手数据
-  const {singers, hasNext, loadding, query} = useSelector(selectSingers);
+  const { singers, hasNext, loadding, query } = useSelector(selectSingers)
   useEffect(() => {
-    dispatch(fetchSingers(query))
-    .then(v => {
+    dispatch(fetchSingers(query)).then(v => {
       setTimeout(() => {
         setLoading({
           pullDown: false,
           pullUp: false
-        });
-      }, 500);
-    });
-  }, [dispatch, query]);
+        })
+      }, 500)
+    })
+  }, [dispatch, query])
 
   //下拉刷新
   const handlePulldown = () => {
     if (query.offset !== 0) {
-      setLoading({...loading, pullDown: true});
-      dispatch(setOffset(0));
+      setLoading({ ...loading, pullDown: true })
+      dispatch(setOffset(0))
     }
   }
 
   const handlePullup = () => {
     if (hasNext) {
-      dispatch(setOffset(singers.length));
-      setLoading({...loading, pullUp: true});
+      dispatch(setOffset(singers.length))
+      setLoading({ ...loading, pullUp: true })
     }
   }
 
@@ -99,25 +103,27 @@ const Singers = () => {
   })
 
   return (
-    <ContainerWrapper>
-      <div className='menu'>
-        <HotCategory />
-        <AlphaCategory />
-      </div>
-      {loadding ? <Loading /> : null}
-      <ListContainer>
-        <Scroll
-          ref={scrollRef}
-          pullDown={handlePulldown}
-          pullUp={handlePullup}
-          pullDownLoading={loading.pullDown}
-          pullUpLoading={loading.pullUp}
-        >
-          <ul>{singerElemenents}</ul>
-        </Scroll>
-      </ListContainer>
-    </ContainerWrapper>
+    <HomeLayout>
+      <ContainerWrapper>
+        <div className='menu'>
+          <HotCategory />
+          <AlphaCategory />
+        </div>
+        {loadding ? <Loading /> : null}
+        <div className='content'>
+          <Scroll
+            ref={scrollRef}
+            pullDown={handlePulldown}
+            pullUp={handlePullup}
+            pullDownLoading={loading.pullDown}
+            pullUpLoading={loading.pullUp}
+          >
+            <ul>{singerElemenents}</ul>
+          </Scroll>
+        </div>
+      </ContainerWrapper>
+    </HomeLayout>
   )
 }
 
-export default Singers;
+export default Singers
