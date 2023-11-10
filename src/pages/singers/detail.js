@@ -13,11 +13,12 @@ import style from '../../styles/global'
 import Scroll from '../../components/scroll'
 import { useRef } from 'react'
 import { startSequencePlay } from '../../store/api/playerSlice'
+import PlayerLayout from '../player/layout'
 const HEADER_HEIGHT = 40
 
 const Container = styled.div`
   background-color: #fff;
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
@@ -95,10 +96,12 @@ const SingerDetail = () => {
   useEffect(() => {
     //说明数据已经拉取完成
     if (detail) {
-      scrollData.current.imageHeight = imageRef.current.offsetHeight;
-      scrollWrapperRef.current.style.top = `${imageRef.current.offsetHeight - 10}px`;
-      scrollRef.current.refresh();
-      console.log(imageRef.current.offsetHeight);
+      scrollData.current.imageHeight = imageRef.current.offsetHeight
+      scrollWrapperRef.current.style.top = `${
+        imageRef.current.offsetHeight - 10
+      }px`
+      scrollRef.current.refresh()
+      console.log(imageRef.current.offsetHeight)
     }
   }, [detail])
 
@@ -110,34 +113,36 @@ const SingerDetail = () => {
     const imageHeight = scrollData.current.imageHeight
     const minScrollY = -imageHeight + HEADER_HEIGHT
     const percent = Math.abs(y / imageHeight)
-    console.log(percent);
+    console.log(percent)
     if (y > 0) {
       //图片放大
       imageRef.current.style['transform'] = `scale(${1 + percent})`
-      scrollWrapperRef.current.style.top = `${imageHeight}px`;
+      scrollWrapperRef.current.style.top = `${imageHeight}px`
     } else if (y >= minScrollY) {
       imageRef.current.style.paddingTop = '75%'
       imageRef.current.style.height = 0
       // 列表在上，背景图在下
-      imageRef.current.style.zIndex = 0;
-      scrollWrapperRef.current.style.zIndex = 1;
-      scrollWrapperRef.current.style.top = `${imageHeight}px`;
+      imageRef.current.style.zIndex = 0
+      scrollWrapperRef.current.style.zIndex = 1
+      scrollWrapperRef.current.style.top = `${imageHeight}px`
     } else if (y < minScrollY) {
       // 往上滑动，但是超过 Header 部分
-      imageRef.current.style.height = `${HEADER_HEIGHT}px`;
-      imageRef.current.style.paddingTop = '0px';
+      imageRef.current.style.height = `${HEADER_HEIGHT}px`
+      imageRef.current.style.paddingTop = '0px'
       // 背景图展示在上，防止被列表遮住
-      imageRef.current.style.zIndex = 1;
-      scrollWrapperRef.current.style.zIndex = 0;
-      scrollWrapperRef.current.style.top = `0`;
+      imageRef.current.style.zIndex = 1
+      scrollWrapperRef.current.style.zIndex = 0
+      scrollWrapperRef.current.style.top = `0`
     }
   }
 
   const handleClickSong = (songs, index) => {
-    dispatch(startSequencePlay({
-      playlist: songs,
-      index: index
-    }));
+    dispatch(
+      startSequencePlay({
+        playlist: songs,
+        index: index
+      })
+    )
   }
 
   const { artist, hotSongs } = detail
@@ -156,24 +161,26 @@ const SingerDetail = () => {
   })
 
   return (
-    <Container $artistUrl={artist.picUrl}>
-      <BackHeader title={artist.name} />
-      <header ref={imageRef}>
-        <div className='filter' />
-      </header>
-      <div className='scroll-wrapper' ref={scrollWrapperRef}>
-        <Scroll onScroll={onScroll} ref={scrollRef}>
-          <div className='song-list-wrapper'>
-            <div className='play-wapper'>
-              <span className='iconfont icon'>&#xe6e3;</span>
-              <span className='play-all'>播放全部</span>
-              <span className='total-songs'>（共 {hotSongs.length}首）</span>
+    <PlayerLayout>
+      <Container $artistUrl={artist.picUrl}>
+        <BackHeader title={artist.name} />
+        <header ref={imageRef}>
+          <div className='filter' />
+        </header>
+        <div className='scroll-wrapper' ref={scrollWrapperRef}>
+          <Scroll onScroll={onScroll} ref={scrollRef}>
+            <div className='song-list-wrapper'>
+              <div className='play-wapper'>
+                <span className='iconfont icon'>&#xe6e3;</span>
+                <span className='play-all'>播放全部</span>
+                <span className='total-songs'>（共 {hotSongs.length}首）</span>
+              </div>
+              {songs}
             </div>
-            {songs}
-          </div>
-        </Scroll>
-      </div>
-    </Container>
+          </Scroll>
+        </div>
+      </Container>
+    </PlayerLayout>
   )
 }
 

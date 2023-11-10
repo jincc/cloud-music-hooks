@@ -12,6 +12,7 @@ import BackHeader from '../../components/navbar/fixed-navbar'
 import SongItem from '../../components/songlist/songItem'
 import Scroll from '../../components/scroll'
 import { startSequencePlay } from '../../store/api/playerSlice'
+import PlayerLayout from '../player/layout'
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -21,7 +22,7 @@ const Container = styled.div`
 
   .content {
     //低于屏幕高度时，使其能够滚动
-    min-height: calc(100vh + 1px);
+    /* min-height: calc(100vh + 1px); */
   }
 `
 
@@ -74,15 +75,17 @@ const AlbumList = () => {
   })
 
   return (
-    <Container>
-      <BackHeader ref={backHeaderRef} title={playlist.name} />
-      <Scroll onScroll={onScroll}>
-        <div className='content'>
-          <AlbumHeader album={playlist} />
-          {songs}
-        </div>
-      </Scroll>
-    </Container>
+    <PlayerLayout>
+      <Container>
+        <BackHeader ref={backHeaderRef} title={playlist.name} />
+        <Scroll onScroll={onScroll}>
+          <div className='content'>
+            <AlbumHeader album={playlist} />
+            {songs}
+          </div>
+        </Scroll>
+      </Container>
+    </PlayerLayout>
   )
 }
 
