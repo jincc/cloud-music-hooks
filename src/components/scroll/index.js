@@ -114,6 +114,9 @@ const Scroll = forwardRef((props, ref) => {
           bScroll.refresh();
           bScroll.scrollTo(0, 0);
         }
+      },
+      getBScroll: () => {
+        return bScroll;
       }
     }
   });

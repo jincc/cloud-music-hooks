@@ -59,9 +59,7 @@ const FullPlayer = ({ onPercentChanged }) => {
             height='100%'
           />
         </div>
-        <div className='mini-lyric'>
-          <MiniLyric />
-        </div>
+        <MiniLyric />
         {/* 底部菜单区域 */}
         <Menu song={song} onPercentChanged={onPercentChanged} />
 

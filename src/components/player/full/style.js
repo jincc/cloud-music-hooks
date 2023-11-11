@@ -82,17 +82,6 @@ export const Container = styled.div`
     }
   }
 
-  .mini-lyric {
-    display: flex;
-    max-width: 85vw;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
   &.move-enter, &.move-appear {
     bottom: -100vh;
     opacity: 0;

@@ -172,12 +172,14 @@ const playerSlice = createSlice({
         state.progress = progress
         //更新歌词信息
         let lastRow = null;
-        for (const element of (state.lyric || [])) {
+        let lyric = state.lyric || [];
+        for (let index = 0; index < lyric.length; index++) {
+          const element = lyric[index];
           if (element.timeoffset >= action.payload * 1000) {
             state.currentLyricRow = lastRow;
             break;
           } 
-          lastRow = element.data;
+          lastRow = index;
         }
       }
     },
