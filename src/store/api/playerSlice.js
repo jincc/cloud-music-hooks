@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { checkMp3, get, getMp3Url, shuffleSongList } from '../../utils'
 import { PlayMode } from '../../utils/config'
-
+import parser from '../../utils/parser'
 // // 获取歌词
-// export const fetchLyricThunk = createAsyncThunk('player/lyric',
-//   async (id) => {
-//     const result = await get(`/lyric?id=${id}`);
-//     return result;
-// });
+export const fetchLyricThunk = createAsyncThunk('player/lyric',
+  async (id) => {
+    const result = await get(`/lyric?id=${id}`);
+    return parser.parse(result);
+});
 
 //尝试播放歌曲，不能播放的话，切到下一首
 export const tryPlaySongThunk = createAsyncThunk(
@@ -15,8 +15,7 @@ export const tryPlaySongThunk = createAsyncThunk(
   async (id, { dispatch, getState }) => {
     await dispatch(setOnReady(false))
     if (await checkMp3(getMp3Url(id))) {
-      // const lyric = await dispatch(fetchLyricThunk(id)).unwrap();
-      // console.log(lyric);
+      await dispatch(fetchLyricThunk(id)).unwrap();
       await dispatch(setOnReady(true))
     } else {
       //开始下一首播放
@@ -55,7 +54,9 @@ const initialState = {
   //歌词信息
   lyric: null,
   //播放进度
-  progress: 0
+  progress: 0,
+  //当前歌词信息
+  currentLyricRow: null
 }
 const playerSlice = createSlice({
   name: 'player',
@@ -169,6 +170,15 @@ const playerSlice = createSlice({
         const song = playlist[currentIndex]
         const progress = (action.payload * 1000) / song.dt
         state.progress = progress
+        //更新歌词信息
+        let lastRow = null;
+        for (const element of (state.lyric || [])) {
+          if (element.timeoffset >= action.payload * 1000) {
+            state.currentLyricRow = lastRow;
+            break;
+          } 
+          lastRow = element.data;
+        }
       }
     },
     //通过手势更新播放进度
@@ -231,9 +241,9 @@ const playerSlice = createSlice({
     }
   },
   extraReducers: builder => {
-    // builder.addCase(fetchLyricThunk.fulfilled, (state, action) => {
-    //   state.lyric = action.payload;
-    // })
+    builder.addCase(fetchLyricThunk.fulfilled, (state, action) => {
+      state.lyric = action.payload;
+    })
   }
 })
 

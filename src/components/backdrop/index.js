@@ -11,7 +11,7 @@ const Container = styled.div`
   left: 0;
   right: 0;
   background-color: ${style['background-color-shadow']};
-
+  z-index: 200;
   .content {
     position: absolute;
     left: 0;

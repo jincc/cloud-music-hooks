@@ -21,7 +21,7 @@ export const Container = styled.div`
   bottom: 0;
   height: 60px;
   background-color: #fff;
-  z-index: 100;
+  z-index: 1;
   border-top: 1px solid ${style["border-color"]};
   .cover {
     width: 40px;

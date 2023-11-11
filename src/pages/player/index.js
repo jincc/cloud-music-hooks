@@ -75,8 +75,8 @@ const Player = () => {
     //更新进度条
     dispatch(setCurrentPlayTimeOffset(e.target.currentTime));
   }
-  // 创建防抖函数，防止进度条抖动太快
-  const handleTimeUpdate = debounce(_handleTimeUpdate, 1000)
+  // // 创建防抖函数，防止进度条抖动太快
+  // const handleTimeUpdate = debounce(_handleTimeUpdate, 1000)
   const song = playlist[currentIndex]
   const handlePercentChanged = (percent) => {
     
@@ -92,7 +92,7 @@ const Player = () => {
         src={getMp3Url(song.id)}
         onError={handleError}
         onEnded={handleEnd}
-        onTimeUpdate={handleTimeUpdate}
+        onTimeUpdate={_handleTimeUpdate}
       />
     </>
   )

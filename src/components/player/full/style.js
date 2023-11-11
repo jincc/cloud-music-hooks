@@ -16,7 +16,7 @@ export const Container = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 101;
+  z-index: 2;
   background-color: ${style['background-color']};
   .background {
     z-index: -1;
@@ -42,11 +42,14 @@ export const Container = styled.div`
     color: ${style['font-color-desc']};
     .song-name {
       color: ${style['font-color-desc']};
-      font-size: ${style['font-size-l']};
+      font-size: ${style['font-size-ll']};
+      ${style.noWrap()}
+      text-align: center;
+      max-width: 70vw;
     }
     .singer {
       margin-top: 10px;
-      color: ${style['font-color-desc-v2']};
+      color: ${style['font-color-desc']};
       font-size: ${style['font-size-m']};
     }
   }
@@ -79,6 +82,16 @@ export const Container = styled.div`
     }
   }
 
+  .mini-lyric {
+    display: flex;
+    max-width: 85vw;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   &.move-enter, &.move-appear {
     bottom: -100vh;
@@ -94,5 +107,5 @@ export const Container = styled.div`
     opacity: 0;
     transition: all 300ms ease-out;
   }
-  
+
 `

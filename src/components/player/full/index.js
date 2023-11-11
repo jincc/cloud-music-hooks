@@ -8,6 +8,7 @@ import {
 import Menu from './menu'
 import PlayList from '../playlist'
 import { useState } from 'react'
+import MiniLyric from '../lyric'
 const FullPlayer = ({ onPercentChanged }) => {
   const [show, setShow] = useState(true)
   const dispatch = useDispatch()
@@ -57,6 +58,9 @@ const FullPlayer = ({ onPercentChanged }) => {
             width='100%'
             height='100%'
           />
+        </div>
+        <div className='mini-lyric'>
+          <MiniLyric />
         </div>
         {/* 底部菜单区域 */}
         <Menu song={song} onPercentChanged={onPercentChanged} />
