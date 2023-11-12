@@ -34,26 +34,19 @@ const Container = styled.div`
   }
 `
 
-const Banner = () => {
-  const dispatch = useDispatch()
-  const { banners = [] , loadding} = useSelector(selectRecommend)
-  //获取banner数据
-  useEffect(() => {
-    dispatch(fetchBanners())
-  }, [])
-
+const Banner = ({banners}) => {
   const slides = banners.map((e, index) => {
     return (
-      <SwiperSlide key={e.encodeId + index}>
+      <SwiperSlide key={e.bannerId + index}>
         <div className='slider'>
-          <img src={e.imageUrl} alt='banner' width='100%' height='100%' />
+          <img src={e.pic} alt='banner' width='100%' height='100%' />
         </div>
       </SwiperSlide>
     )
   })
 
   return (
-    <Container $loadding={loadding}>
+    <Container>
       <div className='before'/>
       <div className='swiper-container'>
         <Swiper modules={[Pagination]} pagination>

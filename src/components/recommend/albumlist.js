@@ -23,20 +23,20 @@ const Container = styled.div`
   }
 `;
 
-const AlbumList = () => {
+const AlbumList = ({albums}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {albums=[]} = useSelector(selectRecommend);
-  useEffect(() => {
-    dispatch(fetchAlbumList());
-  }, []);
 
   if (albums.length === 0) return <div></div>
 
   const albumsElems = albums.map((e, index) => {
-    return <Album album={e} key={e.id + index} onClick={() => {
-      navigate(`/album/${e.id}`)
-    }}/>
+    if (e.resources.length > 0) {
+      const data = e.resources[0];
+      return <Album album={data} key={data.resourceId} onClick={() => {
+        navigate(`/album/${data.resourceId}`)
+      }}/>
+    }
+    return null;
   })
   return <Container>
     <h2 className="header">推荐歌单</h2>
