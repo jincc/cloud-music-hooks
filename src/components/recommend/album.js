@@ -18,12 +18,12 @@ import { formatPlayCount } from '../../utils';
  * @returns 
  */
 const Container = styled.div`
-  margin-bottom: 15px;
+  margin-right: 8px;
   position: relative;
-  width: 32vw;
+  flex: 0 0 32vw;
   .cover {
     height: 32vw;
-    border-radius: 3px;
+    border-radius: 8px;
   }
   .title {
     margin-top: 2px;
@@ -39,8 +39,8 @@ const Container = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    height: 25px;
-    padding-right: 5px;
+    height: 20px;
+    padding-right: 8px;
     font-size: ${style["font-size-s"]};
     color: #fff;
   }
@@ -50,7 +50,7 @@ const Container = styled.div`
     left: 0;
     width: 100%;
     top: 0;
-    height: 25px;
+    height: 20px;
     ${style.decorateBackground()}
   }
 `;

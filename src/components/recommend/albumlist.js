@@ -8,18 +8,24 @@ import { useNavigate } from "react-router-dom"
 
 const Container = styled.div`
   background-color: #fff;
+  padding:0 0 20px 10px;
+  border-bottom: 1px solid ${style["border-color"]};
+
   .header {
     height: 40px;
     line-height: 40px;
     font-size: ${style["font-size-l"]};
     font-weight: 700;
-    padding-left: 5px;
+
+    .arrow {
+      font-size: ${style["font-size-s"]};
+      padding-left: 2px;
+    }
   }
   .list {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    overflow-x: auto;
+    ${style.hiddenScrollBar()}
   }
 `;
 
@@ -39,7 +45,7 @@ const AlbumList = ({albums}) => {
     return null;
   })
   return <Container>
-    <h2 className="header">推荐歌单</h2>
+    <h2 className="header">推荐歌单<span className="iconfont arrow">&#xe618;</span></h2>
     <div className="list">
       {albumsElems}
     </div>
