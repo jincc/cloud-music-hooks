@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useMatch } from 'react-router-dom'
 import Navbar from '../../components/navbar'
 
-const Home = () => {
+const HomePage = () => {
   // 首页直接重定向到推荐页
   const match = useMatch('/')
   if (match) {
@@ -15,4 +15,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomePage

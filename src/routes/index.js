@@ -1,16 +1,17 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Home from '../pages/home'
+import HomePage from '../pages/home'
 import ErrorPage from '../pages/error'
 import Recommend from '../pages/recommend'
 import Singers from '../pages/singers'
 import Rank from '../pages/rank'
-import Search from '../pages/search'
-import Playlist from '../pages/playlist'
-import SingerDetail from '../pages/singers/detail'
+import SearchPage from '../pages/search'
+import PlaylistPage from '../pages/playlist'
+import SingerDetailPage from '../pages/singers/detail'
+import AlbumPage from '../pages/album'
 export default createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <HomePage />,
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Recommend /> },
@@ -21,14 +22,18 @@ export default createBrowserRouter([
   },
   {
     path: '/search',
-    element: <Search />
+    element: <SearchPage />
   },
   {
     path: '/playlist/:id',
-    element: <Playlist />
+    element: <PlaylistPage />
+  },
+  {
+    path: '/album/:id',
+    element: <AlbumPage />
   },
   {
     path: '/singer/:id',
-    element: <SingerDetail />
+    element: <SingerDetailPage />
   }
 ])

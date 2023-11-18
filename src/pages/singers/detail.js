@@ -79,7 +79,7 @@ const Container = styled.div`
 `
 
 // 歌手详情页面
-const SingerDetail = () => {
+const SingerDetailPage = () => {
   const scrollData = useRef({
     imageHeight: 0
   })
@@ -184,4 +184,4 @@ const SingerDetail = () => {
   )
 }
 
-export default SingerDetail
+export default SingerDetailPage

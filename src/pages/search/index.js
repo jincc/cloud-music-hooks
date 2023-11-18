@@ -4,7 +4,7 @@ import Navi from '../../components/search/navi'
 import SearchContent from '../../components/search/searchContent'
 import { debounce } from '../../utils'
 
-const Search = () => {
+const SearchPage = () => {
   const [keyword, setKeyword] = useState('');
 
   // 搜索变化监听
@@ -26,4 +26,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default SearchPage

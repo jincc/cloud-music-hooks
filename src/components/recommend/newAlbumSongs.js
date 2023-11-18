@@ -7,6 +7,8 @@ import 'swiper/css/pagination'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { tryPlayAndInsertSong } from '../../store/api/playerSlice'
+import Toast from '../toast'
+import { useRef } from 'react'
 
 const Container = styled.div`
   header {
@@ -79,6 +81,7 @@ const Cell = ({ coverPicUrl, title, subTitle, onClick }) => {
 const NewAlbumSongs = ({ data }) => {
   const navigate = useNavigate()
   const dispath = useDispatch()
+  const toastRef = useRef()
   const childs = data.map((e, index) => {
     const resources = e.resources
     return (
@@ -109,6 +112,7 @@ const NewAlbumSongs = ({ data }) => {
                     navigate(`/album/${resourceId}`)
                     break;
                   default:
+                    toastRef.current.show('暂不支持')
                     break;
                 }
               }}
@@ -124,6 +128,7 @@ const NewAlbumSongs = ({ data }) => {
         新歌新碟\数字专辑<span className='iconfont arrow'>&#xe618;</span>
       </header>
       <Swiper className='content' slidesPerView={'auto'}>{childs}</Swiper>
+      <Toast ref={toastRef} textColor={style['font-color-desc']}/>
     </Container>
   )
 }
