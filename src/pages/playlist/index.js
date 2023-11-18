@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
-import AlbumHeader from '../../components/album/header'
+import AlbumHeader from '../../components/playlist/header'
 import { useEffect, useRef, useState } from 'react'
 import {
   fetchAlbumSongsList,
   selectAlbumState
-} from '../../store/api/albumSlice'
+} from '../../store/api/playlistSlice'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import Spinner from '../../components/spinner'
@@ -26,7 +26,7 @@ const Container = styled.div`
   }
 `
 
-const AlbumList = () => {
+const Playlist = () => {
   const backHeaderRef = useRef()
   const { id } = useParams()
   const dispatch = useDispatch()
@@ -89,4 +89,4 @@ const AlbumList = () => {
   )
 }
 
-export default AlbumList
+export default Playlist

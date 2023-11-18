@@ -9,10 +9,11 @@ import Spinner from '../../components/spinner'
 import HomeLayout from '../home/layout'
 import { useEffect } from 'react'
 import DragonBall from '../../components/recommend/dragonBall'
+import NewAlbumSongs from '../../components/recommend/newAlbumSongs'
 
 const Recommend = () => {
   const dispatch = useDispatch()
-  const {loadding, banners, albums, dragonBalls} = useSelector(selectRecommend);
+  const {loadding, banners, albums, dragonBalls, newAlbumSongs} = useSelector(selectRecommend);
   //获取首页数据
   useEffect(() => {
     dispatch(fetchHomeData())
@@ -26,6 +27,7 @@ const Recommend = () => {
       <Banner banners={banners} />
       <DragonBall dragonBalls={dragonBalls}/>
       <AlbumList albums={albums} />
+      <NewAlbumSongs data={newAlbumSongs} />
     </HomeLayout>
   )
 }

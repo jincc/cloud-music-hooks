@@ -4,7 +4,7 @@ import singersSlice from "./api/singersSlice";
 import rankSlice from "./api/rankSlice";
 import recommendSlice from "./api/recommendSlice";
 import searchSlice from "./api/searchSlice";
-import albumSlice from "./api/albumSlice";
+import playlistSlice from "./api/playlistSlice";
 import singerDetailSlice from "./api/singerDetailSlice";
 import playerSlice from "./api/playerSlice";
 
@@ -15,7 +15,7 @@ const store = configureStore({
     [rankSlice.name]: rankSlice.reducer,
     [recommendSlice.name]: recommendSlice.reducer,
     [searchSlice.name]: searchSlice.reducer,
-    [albumSlice.name]: albumSlice.reducer,
+    [playlistSlice.name]: playlistSlice.reducer,
     [singerDetailSlice.name]: singerDetailSlice.reducer,
     [playerSlice.name]: playerSlice.reducer
   },

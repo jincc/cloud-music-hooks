@@ -7,8 +7,8 @@ export const fetchAlbumSongsList = createAsyncThunk('album/songlist',
     return results.playlist;
   })
 
-const albumSlice = createSlice({
-  name: 'album',
+const playlistSlice = createSlice({
+  name: 'playlist',
   initialState: {
     playlist: null,
     loadding: false
@@ -27,5 +27,5 @@ const albumSlice = createSlice({
 });
 
 
-export default albumSlice;
-export const selectAlbumState = (state) => state.album;
+export default playlistSlice;
+export const selectAlbumState = (state) => state.playlist;

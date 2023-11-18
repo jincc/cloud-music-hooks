@@ -29,7 +29,7 @@ const Rank = () => {
     return (
       <OfficialRowStyled
         key={e.id + `${index}`}
-        onClick={() => navigate(`/album/${e.id}`)}
+        onClick={() => navigate(`/playlist/${e.id}`)}
       >
         <ListCard data={e} />
         <SongList songs={e.tracks} />
@@ -43,7 +43,7 @@ const Rank = () => {
         data={e}
         isBigMode={true}
         key={e.id + `${index}`}
-        onClick={() => navigate(`/album/${e.id}`)}
+        onClick={() => navigate(`/playlist/${e.id}`)}
       />
     )
   })

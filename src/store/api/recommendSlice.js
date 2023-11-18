@@ -25,6 +25,8 @@ const recommendSlice = createSlice({
     dragonBalls: [],
     //推荐歌单
     albums: [],
+    //新歌新碟
+    newAlbumSongs: [],
     loadding: false
   },
   reducers: {},
@@ -53,6 +55,13 @@ const recommendSlice = createSlice({
           const albums = result.creatives;
           state.albums = albums;
         }
+        //新歌新碟
+        result = data.find(e => e.blockCode === 'HOMEPAGE_BLOCK_NEW_ALBUM_NEW_SONG')
+        if (result) {
+          const albums = result.creatives;
+          state.newAlbumSongs = albums;
+        }
+        
       })
       .addCase(fetchHomeData.rejected, (state, action) => {
         state.loadding = false

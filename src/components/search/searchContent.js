@@ -73,7 +73,7 @@ const SearchContent = ({ keyword }) => {
           <AlbumItem
             picUrl={e.coverImgUrl + '?params=300*300'}
             name={`歌单: ${e.name}`}
-            onClick={() => navigate(`/album/${e.id}`)}
+            onClick={() => navigate(`/palylist/${e.id}`)}
           />
         </div>
       )

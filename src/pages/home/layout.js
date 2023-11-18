@@ -8,7 +8,7 @@ const Container = styled.div`
   width: 100%;
   bottom: ${props => props.$isPlaying ? '70px' : 0};
   background-color: #fff;
-  overflow: auto;
+  overflow-y: auto;
   z-index: -1;
   ${style.hiddenScrollBar()}
 `

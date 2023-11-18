@@ -39,7 +39,7 @@ const AlbumList = ({albums}) => {
     if (e.resources.length > 0) {
       const data = e.resources[0];
       return <Album album={data} key={data.resourceId} onClick={() => {
-        navigate(`/album/${data.resourceId}`)
+        navigate(`/playlist/${data.resourceId}`)
       }}/>
     }
     return null;
