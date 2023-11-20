@@ -9,7 +9,7 @@ const Container = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    bottom: 65px;
+    bottom: 105px;
     right: 0;
     //设置背景图
     background: url(${props => props.$blurPicUrl}) no-repeat;
@@ -29,24 +29,34 @@ const Container = styled.div`
   }
   .menu {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: space-around;
     position: absolute;
     bottom: 65px;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    background-color: #fff;
+    border-radius: 19px;
+    height: 38px;
     .item {
       display: flex;
-      flex-direction: column;
+      flex: 1;
       align-items: center;
-      color: white;
+      justify-content: center;
+      color: ${style['font-color-desc']};
+      border-right:  1px solid ${style['font-color-desc-v2']};
       .name {
         font-size: ${style['font-size-s']};
         line-height: 1.5;
+        padding-left: 5px;
       }
       .icon {
-        font-size: 20px;
+        font-size: 16px;
+      }
+
+      &:last-of-type {
+        border-right: 0;
       }
     }
   }
