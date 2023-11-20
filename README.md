@@ -1,8 +1,8 @@
 # 概述
-![首页](./note-docs/demo.png =390x844)
-![首页](./note-docs/demo1.png =390x844)
-![首页](./note-docs/demo3.png =390x844)
-![首页](./note-docs/demo2.png =390x844)
+<img src="./note-docs/demo.png" width='30%'>
+<img src="./note-docs/demo1.png" width='30%'>
+<img src="./note-docs/demo3.png" width='30%'>
+<img src="./note-docs/demo2.png" width='30%'>
 
 网页云音乐H5项目, 技术栈:
 - React: 18
