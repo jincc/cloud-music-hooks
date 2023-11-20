@@ -14,6 +14,7 @@ import Scroll from '../../components/scroll'
 import { useRef } from 'react'
 import { startSequencePlay } from '../../store/api/playerSlice'
 import PlayerLayout from '../player/layout'
+import { formatSongArtistName } from '../../utils'
 const HEADER_HEIGHT = 40
 
 const Container = styled.div`
@@ -148,7 +149,7 @@ const SingerDetailPage = () => {
   const { artist, hotSongs } = detail
 
   const songs = hotSongs.map((e, index) => {
-    const desc = `${e.ar[0].name} - ${e.al.name}`
+    const desc = `${formatSongArtistName(e)} - ${e.al.name}`
     return (
       <SongItem
         key={index}

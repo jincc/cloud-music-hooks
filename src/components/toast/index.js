@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, {keyframes} from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
 import style from '../../styles/global'
 import { useState } from 'react'
@@ -7,38 +7,60 @@ import { useImperativeHandle } from 'react'
 import { useRef } from 'react'
 import ReactDOM from 'react-dom'
 
+const moveTopAnimation = keyframes`
+  from {
+    bottom: -100%;
+    opacity: 0;
+  }
+  to {
+    bottom: 0;
+    opacity: 1;
+  }
+`;
+
+const moveBottomAnimation = keyframes`
+  to {
+    bottom: -100%;
+    opacity: 0;
+  }
+  from {
+    bottom: 0;
+    opacity: 1;
+  }
+`;
+
 
 const Container = styled.div`
   position: fixed;
   left: 0;
   right: 0;
   bottom: -100%;
-  opacity: 0;
-  background-color: ${style['theme-color-shadow']};
+  background-color: ${style['theme-color']};
   display: flex;
   justify-content: center;
   align-items: center;
   color: ${props => props.$textColor || style['font-color-light']};
   font-size: ${style['font-size-m']};
-
+  animation-fill-mode: forwards;
+  animation-duration: 300ms;
   z-index: 1000;
   span {
     padding: 20px;
   }
-  &.move-enter-active,
+  &.move-enter-active {
+    animation-name: ${moveTopAnimation};
+  }
+  &.move-exit-active {
+    animation-name: ${moveBottomAnimation};
+  }
   &.move-enter-done {
     bottom: 0;
-    opacity: 1;
   }
-  &.move-exit-active,
+
   &.move-exit-done {
     bottom: -100%;
-    opacity: 0;
   }
-  &.move-enter-active,
-  &.move-exit-active {
-    transition: all 300ms ease-in;
-  }
+  
 `
 const Toast = forwardRef(({ textColor }, ref) => {
   const [show, setShow] = useState(false)

@@ -128,7 +128,7 @@ const NewAlbumSongs = ({ data }) => {
         新歌新碟\数字专辑<span className='iconfont arrow'>&#xe618;</span>
       </header>
       <Swiper className='content' slidesPerView={'auto'}>{childs}</Swiper>
-      <Toast ref={toastRef} textColor={style['font-color-desc']}/>
+      <Toast ref={toastRef} />
     </Container>
   )
 }

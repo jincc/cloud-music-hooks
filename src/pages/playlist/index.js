@@ -13,6 +13,7 @@ import SongItem from '../../components/songlist/songItem'
 import Scroll from '../../components/scroll'
 import { startSequencePlay } from '../../store/api/playerSlice'
 import PlayerLayout from '../player/layout'
+import { formatSongArtistName } from '../../utils'
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -62,7 +63,7 @@ const Playlist = () => {
   }
 
   const songs = (playlist.tracks || []).map((e, index) => {
-    const desc = `${e.ar[0].name} - ${e.al.name}`
+    const desc = `${formatSongArtistName(e)} - ${e.al.name}`
     return (
       <SongItem
         key={e.id}
